@@ -5,7 +5,9 @@
 
 namespace Nuke::System
 {
-	// 时间种类
+	/// <summary>
+	/// 时间种类
+	/// </summary>
 	enum class DateTimeKind
 	{
 		Unspecified = 0,	// 未指定
@@ -13,7 +15,9 @@ namespace Nuke::System
 		Local = 2,			// 本地时间
 	};
 
-	// 星期
+	/// <summary>
+	/// 周N
+	/// </summary>
 	enum class DayOfWeek
 	{
 		Sunday		= 0,	// 周日
@@ -25,12 +29,9 @@ namespace Nuke::System
 		Saturday	= 6,	// 周六
 	};
 
-	// 
-	// class DateTime 
-	// 表示时间上的一刻，通常以日期和当天的时间表示
-	// 同时支持UTC时间和本机时间
-	// 本类是只读类，不支持 / 请勿继承
-	// 
+	/// <summary>
+	/// 日期时间
+	/// </summary>
 	class DateTime final
 	{
 	public: // 构造析构
@@ -38,7 +39,11 @@ namespace Nuke::System
 		DateTime(uint64_t dateData);
 		DateTime(int64_t ticks);
 		DateTime(int64_t ticks, DateTimeKind kind);
-		DateTime(int32_t year, int32_t month, int day);
+		DateTime(int32_t year, int32_t month, int32_t day);
+		DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second);
+		DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, DateTimeKind kind);
+		DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, int32_t millisecond);
+		DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, int32_t millisecond, DateTimeKind kind);
 		DateTime(const DateTime&) = default;
 		DateTime(DateTime&&) = default;
 		~DateTime();
@@ -97,10 +102,6 @@ namespace Nuke::System
 		TimeSpan Subtract(DateTime value);	// 返回一个新的 TimeSpan，从此实例的值中减去指定的日期和时间。
 		DateTime Subtract(TimeSpan value);	// 返回一个新的 DateTime，从此实例的值中减去指定持续时间。
 
-		// Todo: 等完成TimeZoneInfo后再实现
-		// 判断是否在当前时区的夏时制范围内
-		// bool IsDaylightSavingTime();	
-
 	public: // 属性方法
 		DateTimeKind Kind() const;
 
@@ -120,8 +121,10 @@ namespace Nuke::System
 
 		std::string ToString() const; // yyyy-MM-dd HH:mm::ss
 
-	private: // 私有
-		// 此处未使用impl的考虑到性能和单一成员类型清洁且标准
+	private:
+		/// <summary>
+		/// 存储
+		/// </summary>
 		uint64_t _dateData;
 	};
 }
