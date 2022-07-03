@@ -350,22 +350,22 @@ namespace Nuke::System
     DateTime DateTime::ToLocalTime()
     {
         throw std::runtime_error("no implemented");
-        //if ((_dateData & DateTimeConstant::KindLocal) != 0)
+        //if ((_dateData & DateTimeConst::KindLocal) != 0)
         //{
         //    return *this;
         //}
         //bool isAmbiguousLocalDst;
         //int64_t offset = TimeZoneInfo::GetUtcOffsetFromUtc(this, TimeZoneInfo::Local,  _, isAmbiguousLocalDst).Ticks();
         //int64_t tick = Ticks() + offset;
-        //if ((uint64_t)tick <= DateTimeConstant::MaxTicks)
+        //if ((uint64_t)tick <= DateTimeConst::MaxTicks)
         //{
         //    if (!isAmbiguousLocalDst)
         //    {
-        //        return DateTime((uint64_t)tick | DateTimeConstant::KindLocal);
+        //        return DateTime((uint64_t)tick | DateTimeConst::KindLocal);
         //    }
-        //    return DateTime((uint64_t)tick | DateTimeConstant::KindLocalAmbiguousDst);
+        //    return DateTime((uint64_t)tick | DateTimeConst::KindLocalAmbiguousDst);
         //}
-        //return DateTime(tick < 0 ? DateTimeConstant::KindLocal : DateTimeConstant::MaxTicks | DateTimeConstant::KindLocal);
+        //return DateTime(tick < 0 ? DateTimeConst::KindLocal : DateTimeConst::MaxTicks | DateTimeConst::KindLocal);
     }
     DateTime DateTime::FromFileTime(int64_t fileTime)
     {
@@ -391,21 +391,21 @@ namespace Nuke::System
     DateTime CreateDateTimeFromSystemTime(SYSTEMTIME time, uint64_t hundredNanoSecond)
     {
         uint32_t year = time.wYear;
-        std::vector<uint32_t> days = DateTime::IsLeapYear((int32_t)year) ? DateTimeConstant::s_daysToMonth366 : DateTimeConstant::s_daysToMonth365;
+        auto& days = DateTime::IsLeapYear((int32_t)year) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
         int32_t month = time.wMonth - 1;
         uint32_t n = DaysToYear(year) + days[month] + time.wDay - 1;
-        uint64_t ticks = n * (uint64_t)DateTimeConstant::TicksPerDay;
+        uint64_t ticks = n * (uint64_t)DateTimeConst::TicksPerDay;
 
-        ticks += time.wHour * (uint64_t)DateTimeConstant::TicksPerHour;
-        ticks += time.wMinute * (uint64_t)DateTimeConstant::TicksPerMinute;
+        ticks += time.wHour * (uint64_t)DateTimeConst::TicksPerHour;
+        ticks += time.wMinute * (uint64_t)DateTimeConst::TicksPerMinute;
         uint32_t second = time.wSecond;
         if (second <= 59)
         {
-            uint64_t tmp = second * (uint32_t)DateTimeConstant::TicksPerSecond + time.wMilliseconds * (uint32_t)DateTimeConstant::TicksPerMillisecond + hundredNanoSecond;
-            return DateTime(ticks + tmp | DateTimeConstant::KindUtc);
+            uint64_t tmp = second * (uint32_t)DateTimeConst::TicksPerSecond + time.wMilliseconds * (uint32_t)DateTimeConst::TicksPerMillisecond + hundredNanoSecond;
+            return DateTime(ticks + tmp | DateTimeConst::KindUtc);
         }
 
-        ticks += DateTimeConstant::TicksPerMinute - 1 | DateTimeConstant::KindUtc;
+        ticks += DateTimeConst::TicksPerMinute - 1 | DateTimeConst::KindUtc;
         return DateTime(ticks);
     }
     DateTime FromFileTimeLeapSecondsAware_Windows(uint64_t fileTime)
@@ -415,7 +415,7 @@ namespace Nuke::System
         {
             throw std::invalid_argument("bad file time");
         }
-        return CreateDateTimeFromSystemTime(time, fileTime % DateTimeConstant::TicksPerMillisecond);
+        return CreateDateTimeFromSystemTime(time, fileTime % DateTimeConst::TicksPerMillisecond);
     }
 #endif
     DateTime FromFileTimeLeapSecondsAware(uint64_t fileTime)

@@ -28,10 +28,3 @@ elseif (CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
 endif ()
 
 message ("使用C++标准 - " "C++" ${CMAKE_CXX_STANDARD})
-
-
-# Android编译环境变量
-# ANDROID_HOME=C:\\Microsoft\AndroidSDK\25
-# ANT_HOME=C:\Program Files\Microsoft Visual Studio\2022\Enterprise\Apps\apache-ant-1.9.3
-# JAVA_HOME=C:\Program Files\Android\jdk\jdk-8.0.302.8-hotspot\jdk8u302-b08
-# NDK_ROOT=C:\Microsoft\AndroidNDK\android-ndk-r21e
