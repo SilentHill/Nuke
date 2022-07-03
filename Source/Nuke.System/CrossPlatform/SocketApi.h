@@ -3,7 +3,6 @@
 
 #include "Result.h"
 #include "SocketApiTypes.h"
-#include <System/SafeHandle.h>
 
 namespace Nuke::CrossPlatform::SocketApi
 {

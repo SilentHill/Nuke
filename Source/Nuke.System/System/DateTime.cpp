@@ -232,9 +232,6 @@ namespace Nuke::System
         return (uint32_t)year % 25 != 0 ? true : false;
     }
 
-
-
-
     uint64_t InternalKind(uint64_t dateTimeData)
     {
         return dateTimeData & DateTimeConst::FlagsMask;

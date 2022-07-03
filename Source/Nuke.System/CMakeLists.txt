@@ -76,20 +76,16 @@ add_library(Nuke.System STATIC
 
 target_precompile_headers(Nuke.System PRIVATE _pch.h)
 target_include_directories(Nuke.System PUBLIC "")
-target_link_libraries(Nuke.System "crypto" "libcurl")
-target_link_libraries(Nuke.System ${MSQUIC_LIB_PATH})
 
 # MSQUIC
 set(MSQUIC_LIB_PATH ${CMAKE_CURRENT_SOURCE_DIR})
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
-    string(APPEND MSQUIC_LIB_PATH "/CrossPlatform/MsQuicApi/linux/libmsquic.so")
 
 elseif (CMAKE_SYSTEM_NAME MATCHES "Windows")
 	set(CMAKE_CXX_FLAGS "/EHsc")
     target_link_libraries(Nuke.System "Ws2_32.lib")
     target_link_libraries(Nuke.System "Mswsock.lib")
     target_link_libraries(Nuke.System "AdvApi32.lib")
-    string(APPEND MSQUIC_LIB_PATH "/CrossPlatform/MsQuicApi/windows/msquic.lib")
 endif()
 
 message(NOTICE "【Nuke.System】配置结束")
