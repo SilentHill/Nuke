@@ -68,6 +68,7 @@ add_library(Nuke.System STATIC
 "System/Net/NetworkInformation/NetworkInterface.h" "System/Net/NetworkInformation/NetworkInterface.cpp"
 "System/Net/Sockets/TcpClient.h" "System/Net/Sockets/TcpClient.cpp"
 
+"System/Threading/Tasks/Task.h" "System/Threading/Tasks/Task.cpp"
 "System/Threading/CancellationToken.h" "System/Threading/CancellationToken.cpp"
 
 "System/ServiceModel/ICommunicationObject.h"

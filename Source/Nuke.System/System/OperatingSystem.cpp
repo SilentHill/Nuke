@@ -20,4 +20,12 @@ namespace Nuke::System
         return false;
 #endif
     }
+    bool OperatingSystem::IsLinux()
+    {
+#ifdef __linux__
+        return true;
+#else
+        return false;
+#endif
+    }
 }

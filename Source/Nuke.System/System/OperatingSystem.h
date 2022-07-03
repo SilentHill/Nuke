@@ -8,6 +8,6 @@ namespace Nuke::System
     public:
 		static bool IsWindows();
 		static bool IsMacOS();
-
+		static bool IsLinux();
 	};
 }
