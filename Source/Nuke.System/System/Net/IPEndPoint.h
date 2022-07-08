@@ -1,12 +1,19 @@
 ﻿
 #pragma once
 
-#include "Sockets/AddressFamily.h"
+#include <System/Net/Sockets/AddressFamily.h>
+#include <System/Net/IPAddress.h>
 
 namespace Nuke::System::Net
 {
-    class IPEndPoint
+    /// <summary>
+    /// Initializes a new instance of the IPEndPoint class.
+    /// </summary>
+    class IPEndPoint final
     {
-
+    public:
+        IPEndPoint(int64_t address, int32_t port);
+        IPEndPoint(const IPAddress& address, int32_t port);
     };
 }
+ 

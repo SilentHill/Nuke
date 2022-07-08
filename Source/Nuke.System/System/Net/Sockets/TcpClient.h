@@ -1,13 +1,27 @@
 ﻿
 #pragma once
 
+#include "System/Net/IPEndPoint.h"
+
 namespace Nuke::System::Net::Sockets
 {
-	class TcpClient
+	/// <summary>
+	/// Provides client connections for TCP network services.
+	/// </summary>
+	class TcpClient final
 	{
-	public:
+	public: // 构造析构
 		TcpClient();
-		~TcpClient(); 
+		TcpClient(const TcpClient&) = delete;
+		TcpClient(TcpClient&&) = delete;
+		~TcpClient();
+
+	public:
+		TcpClient(const IPEndPoint& ipEndPoint);
+		TcpClient(const AddressFamily& addressFamily);
+		TcpClient(const std::string& hostname, int32_t port);
+
+	public:
 		void Connect(const std::string& address, int32_t port);
 		void Close();
 		bool Connected();
