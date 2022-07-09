@@ -37,12 +37,16 @@ add_library(Nuke.System STATIC
 "System/Guid.cpp" "System/Guid.h" 
 "System/Environment.cpp" "System/Environment.h" 
 
+
+"System/Buffers/Binary/BinaryPrimitives.h" "System/Buffers/Binary/BinaryPrimitives.cpp"
+
 "System/Diagnostics/Stopwatch.h" "System/Diagnostics/Stopwatch.cpp"
 "System/Diagnostics/Process.h" "System/Diagnostics/Process.cpp"
 "System/Diagnostics/Metrics/Instrument.h" "System/Diagnostics/Metrics/Instrument.cpp"
 "System/Diagnostics/Metrics/Meter.h" "System/Diagnostics/Metrics/Meter.cpp"
 
 "System/Collections/Concurrent/ConcurrentQueue.h"
+
 
 "System/IO/Path.h" "System/IO/Path.cpp"
 "System/IO/File.h" "System/IO/File.cpp"

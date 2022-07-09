@@ -2,6 +2,7 @@
 #pragma once
 
 // CRT
+#include <cstddef>
 #include <cstdint>
 #include <cstdio>
 #include <cmath>
@@ -30,6 +31,7 @@
 #include <regex>
 #include <fstream>
 #include <sstream>
+#include <span>
 
 #ifdef _MSC_VER 
     #define DEV_WARNING(warningMessage) __pragma(message(warningMessage))

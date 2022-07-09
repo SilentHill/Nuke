@@ -8,10 +8,10 @@ namespace Nuke::System::Net
 
     namespace IPAddressParserStatics
     {
-        const int32_t IPv4AddressBytes = 4;
-        const int32_t IPv6AddressBytes = 16;
-        const int32_t IPv6AddressShorts = IPv6AddressBytes / 2;
-        const int32_t NumberOfLabels = IPv6AddressBytes / 2;
+        constexpr int32_t IPv4AddressBytes = 4;
+        constexpr int32_t IPv6AddressBytes = 16;
+        constexpr int32_t IPv6AddressShorts = IPv6AddressBytes / 2;
+        constexpr int32_t NumberOfLabels = IPv6AddressBytes / 2;
     }
 
     class IPAddress::IPAddressImpl
@@ -21,10 +21,10 @@ namespace Nuke::System::Net
         uint32_t _addressOrScopeId;
         int32_t _hashCode;
         std::string _toString;
-        std::vector<uint16_t> _numbers;
+        std::unique_ptr<uint16_t[]> _numbers;
 
     private:
-        uint32_t GetPrivateAddress()
+        uint32_t PrivateAddress()
         {
             return _addressOrScopeId;
         }
@@ -36,12 +36,12 @@ namespace Nuke::System::Net
             _addressOrScopeId = value;
         }
 
-        uint32_t GetPrivateScopeID()
+        uint32_t PrivateScopeId()
         {
             return _addressOrScopeId;
         }
 
-        void SetPrivateScopeID(uint32_t value)
+        void SetPrivateScopeId(uint32_t value)
         {
             _toString = "";
             _hashCode = 0;
@@ -50,16 +50,31 @@ namespace Nuke::System::Net
 
         bool IsIPv4()
         {
-            return _numbers.size() == 0;
+            return _numbers == nullptr;
         }
 
         bool IsIPv6()
         {
-            return _numbers.size() > 0;
+            return _numbers != nullptr;
+        }
+
+        void WriteIPv6Bytes(std::span<uint8_t> destination)
+        {
+            int j = 0;
+            for (int i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
+            {
+                destination[j++] = (uint8_t)((_numbers[i] >> 8) & 0xFF);
+                destination[j++] = (uint8_t)((_numbers[i]) & 0xFF);
+            }
+        }
+
+        void WriteIPv4Bytes(std::span<uint8_t> destination)
+        {
+            uint32_t address = PrivateAddress();
+            (*(uint32_t*)destination.data()) = address;
         }
     };
 
-    // IPAddress接口转发
     IPAddress::IPAddress(uint8_t* address, int32_t addressLength)
     {
         impl = std::make_unique<IPAddress::IPAddressImpl>();
@@ -70,9 +85,9 @@ namespace Nuke::System::Net
         }
         else if (addressLength == IPAddressParserStatics::IPv6AddressBytes)
         {
-            impl->_numbers.resize(IPAddressParserStatics::NumberOfLabels);
+            impl->_numbers = std::make_unique<uint16_t[]>(IPAddressParserStatics::NumberOfLabels);
 
-            for (int i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
+            for (int32_t i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
             {
                 impl->_numbers[i] = (uint16_t)(address[i * 2] * 256 + address[i * 2 + 1]);
             }
@@ -84,12 +99,43 @@ namespace Nuke::System::Net
 
     }
 
+    IPAddress::IPAddress(int64_t newAddress)
+    {
+        if (newAddress < 0 || newAddress > 0x00000000FFFFFFFF)
+        {
+            throw std::out_of_range("newAddress is out of range");
+        }
+
+        impl->SetPrivateAddress((uint32_t)newAddress);
+    }
+
     IPAddress::~IPAddress()
     {
 
     }
 
 
+    IPAddress::IPAddress(uint8_t* address, int32_t addressLength, int64_t scopeid)
+    {
+        if (addressLength != IPAddressParserStatics::IPv6AddressBytes)
+        {
+            throw std::invalid_argument("not ipv6 address length");
+        }
+
+        if (scopeid < 0 || scopeid > 0x00000000FFFFFFFF)
+        {
+            throw std::out_of_range("scopeid out of range");
+        }
+
+        impl->_numbers = std::make_unique<uint16_t[]>(IPAddressParserStatics::NumberOfLabels);
+
+        for (int i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
+        {
+            impl->_numbers[i] = (ushort)(address[i * 2] * 256 + address[i * 2 + 1]);
+        }
+
+        impl->SetPrivateScopeId((uint32_t)scopeid);
+    }
 
 
     enum AddressFamily IPAddress::AddressFamily()
@@ -140,7 +186,7 @@ namespace Nuke::System::Net
             throw std::invalid_argument("socket operation not support.");
         }
 
-        return impl->GetPrivateScopeID();
+        return impl->PrivateScopeId();
     }
 
     void IPAddress::SetScopeId(int64_t value)
@@ -154,23 +200,53 @@ namespace Nuke::System::Net
             throw std::out_of_range("scope id is out of range");
         }
 
-        impl->SetPrivateScopeID((uint32_t)value);
+        impl->SetPrivateScopeId((uint32_t)value);
     }
 
-    std::vector<uint8_t> GetAddressBytes()
+    std::vector<uint8_t> IPAddress::GetAddressBytes()
     {
-        //if (IsIPv6())
-        //{
-        //    byte[] bytes = new byte[IPAddressParserStatics.IPv6AddressBytes];
-        //    WriteIPv6Bytes(bytes);
-        //    return bytes;
-        //}
-        //else
-        //{
-        //    byte[] bytes = new byte[IPAddressParserStatics.IPv4AddressBytes];
-        //    WriteIPv4Bytes(bytes);
-        //    return bytes;
-        //}
+        if (impl->IsIPv6())
+        {
+            std::vector<uint8_t> bytes(IPAddressParserStatics::IPv6AddressBytes);
+            impl->WriteIPv6Bytes(bytes);
+            return bytes;
+        }
+        else
+        {
+            std::vector<uint8_t> bytes(IPAddressParserStatics::IPv4AddressBytes);
+            impl->WriteIPv4Bytes(bytes);
+            return bytes;
+        }
         return {};
+    }
+
+    int64_t IPAddress::HostToNetworkOrder(int64_t host)
+    {
+        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+    }
+
+    int32_t IPAddress::HostToNetworkOrder(int32_t host)
+    {
+        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+    }
+
+    int16_t IPAddress::HostToNetworkOrder(int16_t host)
+    {
+        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+    }
+
+    int64_t IPAddress::NetworkToHostOrder(int64_t network)
+    {
+        return HostToNetworkOrder(network);
+    }
+
+    int32_t IPAddress::NetworkToHostOrder(int32_t network)
+    {
+        return HostToNetworkOrder(network);
+    }
+
+    int16_t IPAddress::NetworkToHostOrder(int16_t network)
+    {
+        return HostToNetworkOrder(network);
     }
 }
