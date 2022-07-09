@@ -1,9 +1,10 @@
 ﻿
 #include "_pch.h"
 
-// 测试用例集
-//#include "Tests/DateTimeTest.h"
-//#include "Tests/TimerTest.h"
+#include "Tests/DateTimeTest.h"
+#include "Tests/TimerTest.h"
+
+#include <Nuke.System.h>
 
 int main(int argc, char** argv)
 {
