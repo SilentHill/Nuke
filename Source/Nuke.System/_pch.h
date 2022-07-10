@@ -13,6 +13,7 @@
 
 // STL
 #include <string>
+#include <string_view>
 #include <iostream>
 #include <random>
 #include <queue>
