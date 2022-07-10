@@ -25,6 +25,8 @@ add_library(Nuke.System STATIC
 
 "System/Event.h"
 "System/Property.h"
+"System/BitConverter.h" "System/BitConverter.cpp"
+
 "System/String.h" "System/String.cpp"
 "System/SafeHandle.h" "System/SafeHandle.cpp"
 "System/OperatingSystem.h" "System/OperatingSystem.cpp"

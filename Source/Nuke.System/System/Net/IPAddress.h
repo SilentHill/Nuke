@@ -40,7 +40,6 @@ namespace Nuke::System::Net
         bool IsIPv6Teredo();
 
         int64_t ScopeId();
-
         void SetScopeId(int64_t value);
 
     public: // 方法

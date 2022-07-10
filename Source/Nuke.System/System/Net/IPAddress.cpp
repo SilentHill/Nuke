@@ -2,6 +2,9 @@
 #include "_pch.h"
 #include "IPAddress.h"
 
+#include <System/BitConverter.h>
+#include <System/Buffers/Binary/BinaryPrimitives.h>
+
 namespace Nuke::System::Net
 {
     using namespace Nuke::System::Net::Sockets;
@@ -220,19 +223,20 @@ namespace Nuke::System::Net
         return {};
     }
 
+    using namespace Nuke::System::Buffers::Binary;
     int64_t IPAddress::HostToNetworkOrder(int64_t host)
     {
-        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+        return BitConverter::IsLittleEndian ? BinaryPrimitives::ReverseEndianness(host) : host;
     }
 
     int32_t IPAddress::HostToNetworkOrder(int32_t host)
     {
-        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+        return BitConverter::IsLittleEndian ? BinaryPrimitives::ReverseEndianness(host) : host;
     }
 
     int16_t IPAddress::HostToNetworkOrder(int16_t host)
     {
-        //return BitConverter.IsLittleEndian ? BinaryPrimitives.ReverseEndianness(host) : host;
+        return BitConverter::IsLittleEndian ? BinaryPrimitives::ReverseEndianness(host) : host;
     }
 
     int64_t IPAddress::NetworkToHostOrder(int64_t network)
