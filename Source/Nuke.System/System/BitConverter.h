@@ -11,175 +11,45 @@ namespace Nuke::System
 #else
         static const bool IsLittleEndian = true;
 #endif
-        static auto GetBytes(bool value)
-        {
-            std::array<std::byte, 1> r;
-            r[0] = (value ? (std::byte)1 : (std::byte)0);
-            return r;
-        }
+        static auto GetBytes(bool value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, bool value)
-        {
-            if (destination.size() < sizeof(std::byte))
-            {
-                return false;
-            }
-            destination[0] = (std::byte)value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, bool value);
 
-        static auto GetBytes(char value)
-        {
-            std::array<std::byte, sizeof(char)> bytes;
-            bytes[0] = (std::byte)value;
-            return bytes;
-        }
+        static auto GetBytes(char value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, char value)
-        {
-            if (destination.size() < sizeof(char))
-            {
-                return false;
-            }
-            destination[0] = (std::byte)value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, char value);
 
-        static auto GetBytes(int16_t value)
-        {
-            std::array<std::byte, sizeof(int16_t)> bytes;
-            *(int16_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(int16_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, int16_t value)
-        {
-            if (destination.size() < sizeof(int16_t))
-            {
-                return false;
-            }
-            *(int16_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, int16_t value);
 
-        static auto GetBytes(int32_t value)
-        {
-            std::array<std::byte, sizeof(int32_t)> bytes;
-            *(int32_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(int32_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, int32_t value)
-        {
-            if (destination.size() < sizeof(int32_t))
-            {
-                return false;
-            }
-            *(int32_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, int32_t value);
 
-        static auto GetBytes(int64_t value)
-        {
-            std::array<std::byte, sizeof(int64_t)> bytes;
-            *(int64_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(int64_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, int64_t value)
-        {
-            if (destination.size() < sizeof(int64_t))
-            {
-                return false;
-            }
-            *(int64_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, int64_t value);
 
-        static auto GetBytes(uint16_t value)
-        {
-            std::array<std::byte, sizeof(uint16_t)> bytes;
-            *(uint16_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(uint16_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, uint16_t value)
-        {
-            if (destination.size() < sizeof(uint16_t))
-            {
-                return false;
-            }
-            *(uint16_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, uint16_t value);
 
-        static auto GetBytes(uint32_t value)
-        {
-            std::array<std::byte, sizeof(uint32_t)> bytes;
-            *(uint32_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(uint32_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, uint32_t value)
-        {
-            if (destination.size() < sizeof(uint32_t))
-            {
-                return false;
-            }
-            *(uint32_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, uint32_t value);
 
-        static auto GetBytes(uint64_t value)
-        {
-            std::array<std::byte, sizeof(uint64_t)> bytes;
-            *(uint64_t*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(uint64_t value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, uint64_t value)
-        {
-            if (destination.size() < sizeof(uint64_t))
-            {
-                return false;
-            }
-            *(uint64_t*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, uint64_t value);
 
-        static auto GetBytes(float value)
-        {
-            std::array<std::byte, sizeof(float)> bytes;
-            *(float*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(float value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, float value)
-        {
-            if (destination.size() < sizeof(float))
-            {
-                return false;
-            }
-            *(float*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, float value);
 
-        static auto GetBytes(double value)
-        {
-            std::array<std::byte, sizeof(double)> bytes;
-            *(double*)(&bytes[0]) = value;
-            return bytes;
-        }
+        static auto GetBytes(double value);
 
-        static bool TryWriteBytes(std::span<std::byte> destination, double value)
-        {
-            if (destination.size() < sizeof(double))
-            {
-                return false;
-            }
-            *(double*)(&destination[0]) = value;
-            return true;
-        }
+        static bool TryWriteBytes(std::span<std::byte> destination, double value);
 
         //static char ToChar(byte[] value, int32_t startIndex) = > unchecked((char)ToInt16(value, startIndex));
         //
