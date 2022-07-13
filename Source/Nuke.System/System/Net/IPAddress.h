@@ -11,9 +11,9 @@ namespace Nuke::System::Net
     class IPAddress
     {
     public: // 构造析构
-        IPAddress(uint8_t* address, int32_t addressLength);
+
         IPAddress(int64_t newAddress);
-        IPAddress(uint8_t* address, int32_t addressLength, int64_t scopeid);
+        IPAddress(std::span<std::byte> address);
         IPAddress(std::span<std::byte> address, int64_t scopeid);
         IPAddress(const IPAddress& ipaddress);
         ~IPAddress();
