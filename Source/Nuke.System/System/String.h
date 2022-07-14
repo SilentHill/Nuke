@@ -19,7 +19,7 @@ namespace Nuke::System
         ~String() = default;
         String(const std::string& stdStr);
 
-        
+
     public: // 方法
         enum class StringComparison
         {
@@ -33,7 +33,7 @@ namespace Nuke::System
         std::vector<String> Split(const String& splitRegex) const;
         String Trim(char trimChar);
         int32_t IndexOf(char value) const;
-        
+
     public: // 静态常量
         static const String Empty;
         static const std::string EmptyStdString;
@@ -44,9 +44,9 @@ namespace Nuke::System
         using std::string::operator+=;
         using std::string::operator[];
 
-    public: // 强制引用转换，严格来说父转子不是很合适，但理论以及各编译器上表现都证明是OK的。
-        static String& AsNukeString(std::string& sourceString);
-        static const String& AsConstNukeString(const std::string& sourceString);
+    public: // 与std::string的强制引用转换（安全）
+        static String& AsString(std::string& sourceString);
+        static const String& AsConstString(const std::string& sourceString);
 
     public: // std::string静态等价函数，专门用于行为扩展
         static bool Equals(const std::string& s1, const std::string& s2, StringComparison stringComparision);

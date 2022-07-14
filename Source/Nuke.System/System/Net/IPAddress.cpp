@@ -6,8 +6,15 @@
 #include <System/Buffers/Binary/BinaryPrimitives.h>
 #include <System/Math.h>
 
+#if __linux__
+#include <arpa/inet.h>
+#else if WIN32
+#include <ws2tcpip.h>
+#endif
+
 namespace Nuke::System::Net
 {
+
     using namespace Nuke::System::Net::Sockets;
 
     namespace IPAddressParserStatics
@@ -17,21 +24,17 @@ namespace Nuke::System::Net
         constexpr int32_t IPv6AddressShorts = IPv6AddressBytes / 2;
         constexpr int32_t NumberOfLabels = IPv6AddressBytes / 2;
     }
+
     class IPAddress::IPAddressImpl
     {
-    private:
-
-        IPAddressImpl(const IPAddressImpl& impl)
-        {
-
-        }
-
     private:
         friend class IPAddress;
         uint32_t _addressOrScopeId;
         int32_t _hashCode;
         std::string _toString;
         std::vector<uint16_t> _numbers;
+        bool operator==(const IPAddressImpl& impl) const = default;
+
 
         uint32_t PrivateAddress()
         {
@@ -86,11 +89,11 @@ namespace Nuke::System::Net
 
     IPAddress::IPAddress(int64_t newAddress)
     {
+        impl = std::make_unique<IPAddressImpl>();
         if (newAddress < 0 || newAddress > 0x00000000FFFFFFFF)
         {
             throw std::out_of_range("newAddress is out of range");
         }
-
         impl->SetPrivateAddress((uint32_t)newAddress);
     }
 
@@ -105,34 +108,73 @@ namespace Nuke::System::Net
     }
     IPAddress::IPAddress(std::span<std::byte> address, int64_t scopeid)
     {
-        if (address.size() != IPAddressParserStatics::IPv6AddressBytes)
+        impl = std::make_unique<IPAddressImpl>();
+        if (address.size() == IPAddressParserStatics::IPv4AddressBytes)
         {
-            throw std::invalid_argument("not ipv6 address length");
+            impl->SetPrivateAddress(*((int32_t*)address.data()));
         }
-
-        if (scopeid < 0 || scopeid > 0x00000000FFFFFFFF)
+        else if (address.size() == IPAddressParserStatics::IPv6AddressBytes)
         {
-            throw std::out_of_range("scopeid out of range");
+            impl->_numbers.resize(IPAddressParserStatics::NumberOfLabels);
+
+            for (int i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
+            {
+                impl->_numbers[i] = (uint16_t)((uint16_t)address[i * 2] * 256 + (uint16_t)address[i * 2 + 1]);
+            }
         }
-
-        impl->_numbers.resize(IPAddressParserStatics::NumberOfLabels);
-
-        for (int32_t i = 0; i < IPAddressParserStatics::NumberOfLabels; i++)
+        else
         {
-            impl->_numbers[i] = (uint16_t)((uint8_t)address[i * 2] * 256 + (uint8_t)address[i * 2 + 1]);
+            throw std::invalid_argument("bad ip address");
         }
-
-        impl->SetPrivateScopeId((uint32_t)scopeid);
     }
 
     IPAddress::IPAddress(const IPAddress& ipaddress)
     {
+        impl = std::make_unique<IPAddressImpl>();
         *impl = *ipaddress.impl;
     }
     std::string IPAddress::ToString()
     {
 
     }
+
+    bool IPAddress::operator==(const IPAddress& ipAddress)
+    {
+        return *impl == *ipAddress.impl;
+    }
+
+    IPAddress IPAddress::Parse(std::string_view ipStringView)
+    {
+        IPAddress ipAddress = IPAddress::None;
+
+        if (ipStringView.find(':') != std::string_view::npos)
+        {
+            // ipv6
+            in6_addr v6addr;
+            auto error = inet_pton(AF_INET6, ipStringView.data(), &v6addr);
+        }
+        else
+        {
+            // ipv4
+        }
+
+        return ipAddress;
+    }
+
+    IPAddress _createIPAddressFromArray(std::initializer_list<std::uint8_t> bytes)
+    {
+        std::span<std::byte> s{ (std::byte*)bytes.begin(), bytes.size() };
+        return { s };
+    }
+
+    const IPAddress IPAddress::Any = _createIPAddressFromArray({ 0, 0, 0, 0 });
+    const IPAddress IPAddress::Loopback = _createIPAddressFromArray({ 127, 0, 0, 1 });
+    const IPAddress IPAddress::Broadcast = _createIPAddressFromArray({ 255, 255, 255, 255 });
+    const IPAddress IPAddress::None = Broadcast;
+
+    const IPAddress IPAddress::IPv6Any = _createIPAddressFromArray({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+    const IPAddress IPAddress::IPv6Loopback = _createIPAddressFromArray({ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 });
+    const IPAddress IPAddress::IPv6None = IPv6Any;
 
     enum AddressFamily IPAddress::AddressFamily()
     {

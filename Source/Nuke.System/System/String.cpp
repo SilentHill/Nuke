@@ -11,7 +11,7 @@ namespace Nuke::System
 
     String::String(const std::string& stdStr) : std::string(stdStr)
     {
-
+        
     }
 
     String::String(std::string&& str)
@@ -22,12 +22,12 @@ namespace Nuke::System
     const String String::Empty("");
     const std::string String::EmptyStdString("");
 
-    String& String::AsNukeString(std::string& sourceString)
+    String& String::AsString(std::string& sourceString)
     {
         return reinterpret_cast<String&>(sourceString);
     }
 
-    const String& String::AsConstNukeString(const std::string& sourceString)
+    const String& String::AsConstString(const std::string& sourceString)
     {
         return reinterpret_cast<const String&>(sourceString);
     }

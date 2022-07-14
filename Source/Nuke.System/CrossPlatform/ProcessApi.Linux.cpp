@@ -100,7 +100,7 @@ namespace Nuke::CrossPlatform::ProcessApi
         using namespace Nuke::System;
         using namespace Nuke::System::IO;
         std::string _fileContents = File::ReadAllText(statusFilePath);
-        const String& fileContents = String::AsConstNukeString(_fileContents);
+        const String& fileContents = String::AsConstString(_fileContents);
         if (fileContents.empty())
         {
             return {};
@@ -284,7 +284,7 @@ namespace Nuke::CrossPlatform::ProcessApi
         using namespace Nuke::System::IO;
         std::string statFileContents = File::ReadAllText(statFilePath);
 
-        auto statFileParts = String::AsConstNukeString(statFileContents).Split(" ");
+        auto statFileParts = String::AsConstString(statFileContents).Split(" ");
 
         ParsedStat parsedStat;
 
