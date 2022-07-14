@@ -156,6 +156,9 @@ namespace Nuke::System::Net
         else
         {
             // ipv4
+            in_addr v4addr;
+            auto error = inet_pton(AF_INET, ipStringView.data(), &v4addr);
+            return ipAddress;
         }
 
         return ipAddress;
