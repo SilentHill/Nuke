@@ -1,6 +1,9 @@
 # Nuke
-Nuke is a C++ library that borrows from dotnet design.
+Nuke is a C++ library that borrows from [dotnet](https://github.com/dotnet) design.
 It is primarily focused on ease of use rather than performance.
+
+# Current Status
+<font color=#FF0000 >It is not completed yet. We have a lot of work to do.</font>
 
 # Base dependencies
 ## C++20
@@ -12,7 +15,7 @@ Using Google `GTest` framework for the Nuke framework Testing
 # Quick Start In Windows
 ## Windows 10 + SSH + WSL + Microsoft Visual Studio 2022 + Clang
 1. Confirm already installed the vs 2022 with clang support and linux C++ support
-2. Confirm WSL feature has been opened in windows 10 , if NOT, please open WSL for linux Clang debug environment.
+2. Confirm WSL feature has been opened in windows 10 , if NOT, please open WSL for linux Clang debug environment. 
 3. Download Ubuntu 22.04 LTS(recommended) from Microsoft Store
 4. Install SSH client and server  both WSL Ubuntu && Windows  
 - Windows  
