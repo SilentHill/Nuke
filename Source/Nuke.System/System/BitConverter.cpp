@@ -24,6 +24,12 @@ namespace Nuke::System
         return true;
     }
 
+#if BIGENDIAN
+    const bool BitConverter::IsLittleEndian = false;
+#else
+    const bool BitConverter::IsLittleEndian = true;
+#endif
+
     auto BitConverter::GetBytes(bool value)
     {
         return GenericGetBytes(value);
@@ -122,5 +128,45 @@ namespace Nuke::System
     bool BitConverter::TryWriteBytes(std::span<std::byte> destination, double value)
     {
         return GenericTryWriteBytes(destination, value);
+    }
+
+    int64_t BitConverter::DoubleToInt64Bits(double value)
+    {
+        return *((int64_t*)&value);
+    }
+
+    double BitConverter::Int64BitsToDouble(int64_t value)
+    {
+        return *((double*)&value);
+    }
+
+    int32_t BitConverter::SingleToInt32Bits(float value)
+    {
+        return *((int32_t*)&value);
+    }
+
+    float BitConverter::Int32BitsToSingle(int32_t value)
+    {
+        return *((float*)&value);
+    }
+
+    uint64_t BitConverter::DoubleToUInt64Bits(double value)
+    {
+        return *((uint64_t*)&value);
+    }
+
+    double BitConverter::UInt64BitsToDouble(uint64_t value)
+    {
+        return *((double*)&value);
+    }
+
+    uint32_t BitConverter::SingleToUInt32Bits(float value)
+    {
+        return *((uint32_t*)&value);
+    }
+
+    float BitConverter::UInt32BitsToSingle(uint32_t value)
+    {
+        return *((float*)&value);
     }
 }
