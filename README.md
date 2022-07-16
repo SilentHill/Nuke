@@ -34,7 +34,7 @@ Get-NetFirewallRule -Name *ssh*
 New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server (sshd)' -Enabled True -Direction Inbound -Protocol TCP -Action Allow -LocalPort 22
 ```
 - Ubuntu  
-* Instal openssh  
+* Install openssh  
 ``sudo apt install openssh-client``  
 ``sudo apt install openssh-server``
 * Start ssh service  
@@ -52,4 +52,5 @@ PasswordAuthentication yes
 
 5. Install Cmake through ``apt install cmake``
 6. Install Ninja as build system, ``apt update -y``  and ``apt install -y ninja-build``  
-7. Install GTest ``apt install libgtest-dev``
+7. Install Clang as the compiler ``apt install clang``   
+8. Install GTest ``apt install libgtest-dev``
