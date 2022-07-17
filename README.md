@@ -16,7 +16,7 @@ Using Google `GTest` framework for the Nuke framework Testing
 ## Windows 10 + SSH + WSL + Microsoft Visual Studio 2022 + Clang
 1. Confirm already installed the vs 2022 with clang support and linux C++ support
 2. Confirm WSL feature has been opened in windows 10 , if NOT, please open WSL for linux Clang debug environment. 
-3. Download Ubuntu 22.04 LTS(recommended) from Microsoft Store
+3. Download Debian (recommended) (**NOTE: Ubuntu 22.04 LTS perhaps has issue on gdb version, when start debuging, cannot insert to the breakpoint, Ubuntu 20.04.4 LTS has the compiler version issue, do not support Span**) from Microsoft Store
 4. Install SSH client and server  both WSL Ubuntu && Windows  
 - Windows  
 * Open Powershell as ADMIN  
@@ -57,3 +57,4 @@ PasswordAuthentication yes
 6. Install Ninja as build system, ``apt update -y``  and ``apt install -y ninja-build``  
 7. Install Clang as the compiler ``apt install clang``   
 8. Install GTest ``apt install libgtest-dev``
+9. Install gdb, rsync, and zip for remote debugging ``apt install gdb, rsync, and zip``
