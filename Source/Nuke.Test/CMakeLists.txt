@@ -15,7 +15,7 @@ add_executable (Nuke.Test
 "_pch.h"
 "Tests/DateTimeTest.h"
 "Tests/TimerTest.h"
-
+"Tests/StringTest.h"
 
 "Nuke.Test.cpp" 
 )

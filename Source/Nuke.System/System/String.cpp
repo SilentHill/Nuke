@@ -62,6 +62,7 @@ namespace Nuke::System
 #elif _WIN32
             return stricmp(s1.c_str(), s2.c_str()) == 0;
 #elif __APPLE__
+            //TODO::
 #endif
         }
         return s1 == s2;
@@ -183,4 +184,26 @@ namespace Nuke::System
     {
         return converter.from_bytes(str);
     }
+
+    int String::Compare(const std::string& strA, const std::string& strB)
+    {
+        return strA.compare(strB);
+    }
+
+
+    int String::Compare(const std::string& strA, const std::string& strB, StringComparison comparisonType)
+    {
+        auto strALowCase = strA;
+        auto strBLowCase = strB;
+        if (comparisonType == StringComparison::CurrentCultureIgnoreCase
+            || comparisonType == StringComparison::InvariantCultureIgnoreCase
+            || comparisonType == StringComparison::OrdinalIgnoreCase)
+        {
+            std::transform(strALowCase.begin(), strALowCase.end(), strALowCase.begin(), ::tolower);
+            std::transform(strBLowCase.begin(), strBLowCase.end(), strBLowCase.begin(), ::tolower);
+        }
+        return strALowCase.compare(strBLowCase);
+    }
+
+    
 }

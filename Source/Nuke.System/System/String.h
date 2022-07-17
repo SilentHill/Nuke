@@ -57,5 +57,8 @@ namespace Nuke::System
         static std::string Replace(const std::string& sourceString, const std::string& oldValue, const std::string& newValue);
         static std::string ConvertWstringToString(const std::wstring& wstr);
         static std::wstring ConvertStringToWstring(const std::string& str);
+        static int Compare(const std::string& strA, const std::string& strB);
+        static int Compare(const std::string& strA, const std::string& strB, StringComparison comparisonType);
+        
     };
 }

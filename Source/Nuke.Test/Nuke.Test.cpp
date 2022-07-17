@@ -3,6 +3,7 @@
 
 #include "Tests/DateTimeTest.h"
 #include "Tests/TimerTest.h"
+#include "Tests/StringTest.h"
 
 #include <Nuke.System.h>
 
