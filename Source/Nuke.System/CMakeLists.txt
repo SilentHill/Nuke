@@ -28,6 +28,7 @@ add_library(Nuke.System STATIC
 "System/BitConverter.h" "System/BitConverter.cpp"
 
 "System/String.h" "System/String.cpp"
+"System/Version.h" "System/Version.cpp"
 "System/SafeHandle.h" "System/SafeHandle.cpp"
 "System/OperatingSystem.h" "System/OperatingSystem.cpp"
 

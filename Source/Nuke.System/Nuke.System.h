@@ -5,6 +5,7 @@
 #include "System/Event.h"
 #include "System/String.h"
 #include "System/Math.h"
+#include "System/Version.h"
 #include "System/TimeSpan.h"
 #include "System/DateTime.h"
 #include "System/Generate.h"
