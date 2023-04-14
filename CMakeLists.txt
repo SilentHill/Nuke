@@ -9,7 +9,7 @@ project ("Nuke")
 include ("Nuke.Cpp.cmake")
 
 # Nuke成员
-add_subdirectory("Nuke.System")
-add_subdirectory("Nuke.Test")
+add_subdirectory("Source/Nuke.System")
+add_subdirectory("Source/Nuke.Test")
 
 message("【Nuke】配置结束")
