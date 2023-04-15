@@ -4,7 +4,6 @@
 #include "_pch.h"
 #include "System/Event.h"
 #include "System/DateTime.h"
-#include "System/BitConverter.h"
 
 
 namespace Nuke::System::Buffers::Binary
@@ -28,20 +27,7 @@ namespace Nuke::System::Buffers::Binary
 
         static uint64_t ReverseEndianness(uint64_t value);
 
-        static double ReadDoubleBigEndian(std::span<std::byte> source);
-
-        static int16_t ReadInt16BigEndian(std::span<std::byte> source);
-
-        static int32_t ReadInt32BigEndian(std::span<std::byte> source);
-
-        static int64_t ReadInt64BigEndian(std::span<std::byte> source);
-
-        static float ReadSingleBigEndian(std::span<std::byte> source);
-
-        static uint16_t ReadUInt16BigEndian(std::span<std::byte> source);
-
-        static uint32_t ReadUInt32BigEndian(std::span<std::byte> source);
-
-        static uint64_t ReadUInt64BigEndian(std::span<std::byte> source);
+    private:
+        BinaryPrimitives() = delete;
     };
 }

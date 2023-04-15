@@ -10,6 +10,7 @@ include ("../Nuke.Cpp.cmake")
 enable_testing()
 # find_package(GTest REQUIRED)
 
+
 # 编译文件
 add_executable (Nuke.Test
 "_pch.h"
@@ -21,8 +22,11 @@ add_executable (Nuke.Test
 )
 
 # 依赖链接
-#target_link_libraries(Nuke.Test "Nuke.System" "gtest")
-# target_link_libraries(Nuke.Test "Nuke.System" GTest::gtest GTest::gtest_main)
+
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+target_include_directories(Nuke.Test PUBLIC "../SubModules/googletest/googletest/include")
+
 target_precompile_headers(Nuke.Test PRIVATE _pch.h)
+target_link_libraries(Nuke.Test "Nuke.System" "gtest")
 
 message(NOTICE "【Nuke.Test】配置结束")

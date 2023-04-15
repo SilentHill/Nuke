@@ -6,7 +6,10 @@ cmake_minimum_required (VERSION 3.8)
 project ("Nuke")
 
 # 公共配置
-include ("Nuke.Cpp.cmake")
+include ("Source/Nuke.Cpp.cmake")
+
+# gtest
+add_subdirectory("Source/SubModules/googletest")
 
 # Nuke成员
 add_subdirectory("Source/Nuke.System")

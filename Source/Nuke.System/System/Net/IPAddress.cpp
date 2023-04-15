@@ -133,9 +133,10 @@ namespace Nuke::System::Net
         impl = std::make_unique<IPAddressImpl>();
         *impl = *ipaddress.impl;
     }
+
     std::string IPAddress::ToString()
     {
-
+        return "";
     }
 
     bool IPAddress::operator==(const IPAddress& ipAddress)
@@ -236,6 +237,7 @@ namespace Nuke::System::Net
         {
             throw std::invalid_argument("socket operation not support.");
         }
+
         if (value < 0 || value > 0x00000000FFFFFFFF)
         {
             throw std::out_of_range("scope id is out of range");

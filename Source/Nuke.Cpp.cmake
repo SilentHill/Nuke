@@ -6,10 +6,10 @@ message ("使用C++编译器 - " ${CMAKE_CXX_COMPILER_ID} " v" ${CMAKE_CXX_COMPI
 # 配置编译器参数
 set(CMAKE_CXX_STANDARD 20)
 if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
-    add_definitions(-Wno-c++17-extensions)
-    add_definitions(-Wno-deprecated-declarations)
-    add_definitions(-Wno-c++98-compat)
-    add_definitions(-Wno-microsoft-include)
+    #add_definitions(-Wno-c++17-extensions)
+    #add_definitions(-Wno-deprecated-declarations)
+    #add_definitions(-Wno-c++98-compat)
+    #add_definitions(-Wno-microsoft-include)
 
     if (CMAKE_SYSTEM_NAME MATCHES "Linux")
         #add_definitions(-fpermissive)
