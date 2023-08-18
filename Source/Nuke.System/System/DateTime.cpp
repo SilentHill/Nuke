@@ -210,10 +210,6 @@ namespace Nuke::System
         _dateData = Init(year, month, day, hour, minute, second, millisecond, kind);
     }
 
-    DateTime::~DateTime()
-    {
-
-    }
 
     bool DateTime::IsLeapYear(int32_t year)
     {
@@ -443,11 +439,6 @@ namespace Nuke::System
 
         uint64_t universalTicks = (uint64_t)fileTime + DateTimeConst::FileTimeOffset;
         return DateTime(universalTicks | DateTimeConst::KindUtc);
-    }
-
-    DateTime::DateTime(uint64_t dateData)
-    {
-        _dateData = dateData;
     }
 
     DateTime& DateTime::operator=(const DateTime& dateTime)
