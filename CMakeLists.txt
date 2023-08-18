@@ -9,7 +9,7 @@ project ("Nuke")
 include ("Source/Nuke.Cpp.cmake")
 
 # gtest
-add_subdirectory("Source/SubModules/googletest")
+#add_subdirectory("Source/SubModules/googletest")
 
 # Nuke成员
 add_subdirectory("Source/Nuke.System")

@@ -1,5 +1,6 @@
 ﻿
 #pragma once
+#include <System/TimeSpan.h>
 
 
 namespace Nuke::System::Threading::Tasks
@@ -39,10 +40,24 @@ namespace Nuke::System::Threading::Tasks
         // 对stop token的封装
     };
 
+    class ErrorPack
+    {
+        int32_t ErrorNumber;
+        std::exception_ptr Exception;
+        std::unique_ptr<ErrorPack> PrevError;
+    };
+
+    class IStopTrigger
+    {
+    public:
+        bool IsTriggered();
+    };
+
     template <typename TResult>
     class Task
     {
     public:
+        friend class TaskFactory;
         TResult GetResult()
         {
             return _future.get();
@@ -58,6 +73,8 @@ namespace Nuke::System::Threading::Tasks
             return task;
         }
 
+        IStopTrigger* stopTrigger;
+
     private:
         std::shared_future<TResult> _future;
     };
@@ -68,7 +85,7 @@ namespace Nuke::System::Threading::Tasks
     };
     enum class TaskStatus
     {
-        Created,
+        Created0,
         WaitingForActivation,
         WaitingToRun,
         Running,
@@ -78,27 +95,49 @@ namespace Nuke::System::Threading::Tasks
         Faulted
     };
 
-    class PackResult
-    {
-        PackResult()
-        {
-        }
 
-        std::exception_ptr FullException;
-    };
-
-    class Tasks
+    class TimeoutTrigger
     {
     public:
-        template <typename FuncType, class... ArgTypes>
-        static auto Run(CancellationToken* cancellationToken, FuncType&& func, ArgTypes&&... args)
+        bool IsTriggered()
         {
+            // return if timer is triggered
+            return true;
+        }
+    };
+
+    // 静态任务派发
+    class TaskFactory
+    {
+    public:
+        template <class FuncType, class... ArgTypes>
+        static Task<std::invoke_result_t<std::decay_t<FuncType>, std::decay_t<ArgTypes>...>>
+        RunAsync(TimeSpan timeoutSpan, FuncType&& func, ArgTypes&&... args)
+        {
+            using _ReturnType = std::invoke_result_t<std::decay_t<FuncType>, std::decay_t<ArgTypes>...>;
             auto future = std::async(std::forward<FuncType>(func), std::forward<ArgTypes>(args)...);
             auto sharedFuture = future.share();
-            using returnType = std::invoke_result<std::decay<FuncType>, std::decay<ArgTypes>...>;
-            Task<returnType> task;
+            Task<_ReturnType> task;
+            task._future = sharedFuture;
             return task;
         }
     };
+
+    // // 原始同步函数
+    // int GetData()
+    // {
+    //     return 0;
+    // }
+    // 
+    // // 同步函数转异步
+    // Task<int> GetDataAsync()
+    // {
+    //     auto task = TaskFactory::Run(TimeSpan(1000),
+    //     []()
+    //     {
+    //         return GetData();
+    //     });
+    //     return task;
+    // }
 
 }
