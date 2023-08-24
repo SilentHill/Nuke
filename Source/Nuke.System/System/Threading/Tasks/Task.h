@@ -107,6 +107,14 @@ namespace Nuke::System::Threading::Tasks
         }
     };
 
+    template <typename TResult>
+    class PackResult
+    {
+    public:
+        TResult Result;
+        std::exception Exception;
+    };
+
     // 静态任务派发
     class TaskFactory
     {
@@ -122,60 +130,54 @@ namespace Nuke::System::Threading::Tasks
             task._future = sharedFuture;
             return task;
         }
-    };
-
-    template <typename TResult>
-    class PackResult
-    {
-    public:
-        TResult Result;
-        std::exception Exception;
-    };
-
-    template <typename Func, typename... Args>
-    auto RunAsyncWithException(Func&& func, Args&&... args) -> Task<PackResult<decltype(func(args...))>>
-    {
-        // 返回值包装类型
-        using PackResultType = PackResult<decltype(func(args...))>;
-
-        // 这里将原始函数进行异常打包
-        auto packLambda = [func = std::forward<Func>(func), args = std::make_tuple(std::forward<Args>(args)...)]() -> PackResultType
+        template <typename Func, typename... Args>
+        static auto RunAsyncWithException(Func&& func, Args&&... args) -> Task<PackResult<decltype(func(args...))>>
         {
-            // 返回值
-            PackResultType packResult;
-            try
+            // 返回值包装类型
+            using PackResultType = PackResult<decltype(func(args...))>;
+
+            // 这里将原始函数进行异常打包
+            auto packLambda = [func = std::forward<Func>(func), args = std::make_tuple(std::forward<Args>(args)...)]() -> PackResultType
             {
-                packResult.Result = std::apply(func, args);
-                return packResult;
-            }
-            catch (const std::exception& e)
-            {
-                packResult.Exception = e;
-                return packResult;
-            }
-            catch (...)
-            {
-                packResult.Exception = std::exception("unknown exception");
-                return packResult;
-            }
-        };
-        return TaskFactory::RunAsync(std::launch::async, packLambda);
+                // 返回值
+                PackResultType packResult;
+                try
+                {
+                    packResult.Result = std::apply(func, args);
+                    return packResult;
+                }
+                catch (const std::exception& e)
+                {
+                    packResult.Exception = e;
+                    return packResult;
+                }
+                catch (...)
+                {
+                    packResult.Exception = std::exception();
+                    return packResult;
+                }
+            };
+            auto task = TaskFactory::RunAsync({}, packLambda);
+            return task;
+        }
+    };
+
+    
+    // 原始同步函数
+    int GetData()
+    {
+        return 0;
     }
-    // // 原始同步函数
-    // int GetData()
-    // {
-    //     return 0;
-    // }
-    // 
-    // // 同步函数转异步
-    // Task<int> GetDataAsync()
-    // {
-    //     auto task = TaskFactory::Run(TimeSpan(1000),
-    //     []()
-    //     {
-    //         return GetData();
-    //     });
-    //     return task;
-    // }
+    
+    // 同步函数转异步
+    Task<PackResult<int>> GetDataAsync()
+    {
+        auto task = TaskFactory::RunAsyncWithException(
+        []()
+        {
+            return GetData();
+        });
+        return task;
+    }
 
 }
