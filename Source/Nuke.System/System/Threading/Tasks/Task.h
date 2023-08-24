@@ -133,7 +133,7 @@ namespace Nuke::System::Threading::Tasks
     };
 
     template <typename Func, typename... Args>
-    auto RunAsyncWithException(Func&& func, Args&&... args) -> std::future<PackResult<decltype(func(args...))>>
+    auto RunAsyncWithException(Func&& func, Args&&... args) -> Task<PackResult<decltype(func(args...))>>
     {
         // 返回值包装类型
         using PackResultType = PackResult<decltype(func(args...))>;
@@ -159,7 +159,7 @@ namespace Nuke::System::Threading::Tasks
                 return packResult;
             }
         };
-        return std::async(std::launch::async, packLambda);
+        return TaskFactory::RunAsync(std::launch::async, packLambda);
     }
     // // 原始同步函数
     // int GetData()
