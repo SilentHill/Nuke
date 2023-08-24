@@ -1,6 +1,7 @@
 ﻿
 #pragma once
 #include <System/TimeSpan.h>
+#include <future>
 
 
 namespace Nuke::System::Threading::Tasks
@@ -123,6 +124,43 @@ namespace Nuke::System::Threading::Tasks
         }
     };
 
+    template <typename TResult>
+    class PackResult
+    {
+    public:
+        TResult Result;
+        std::exception Exception;
+    };
+
+    template <typename Func, typename... Args>
+    auto RunAsyncWithException(Func&& func, Args&&... args) -> std::future<PackResult<decltype(func(args...))>>
+    {
+        // 返回值包装类型
+        using PackResultType = PackResult<decltype(func(args...))>;
+
+        // 这里将原始函数进行异常打包
+        auto packLambda = [func = std::forward<Func>(func), args = std::make_tuple(std::forward<Args>(args)...)]() -> PackResultType
+        {
+            // 返回值
+            PackResultType packResult;
+            try
+            {
+                packResult.Result = std::apply(func, args);
+                return packResult;
+            }
+            catch (const std::exception& e)
+            {
+                packResult.Exception = e;
+                return packResult;
+            }
+            catch (...)
+            {
+                packResult.Exception = std::exception("unknown exception");
+                return packResult;
+            }
+        };
+        return std::async(std::launch::async, packLambda);
+    }
     // // 原始同步函数
     // int GetData()
     // {
