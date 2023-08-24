@@ -81,7 +81,7 @@ add_library(Nuke.System STATIC
 
 "System/ServiceModel/ICommunicationObject.h"
 "System/ServiceModel/CommunicationState.h"
-)
+ "CrossPlatform/TimeZoneApi.h")
 
 target_precompile_headers(Nuke.System PRIVATE _pch.h)
 target_include_directories(Nuke.System PUBLIC "")

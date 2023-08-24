@@ -64,16 +64,6 @@ namespace Nuke::System::Threading::Tasks
             return _future.get();
         }
 
-        template <typename FuncType, class... ArgTypes>
-        Task ContinueWith(FuncType&& func, ArgTypes&&... args)
-        {
-            auto future = _future.then(std::forward<FuncType>(func), std::forward<ArgTypes>(args)...);
-            auto sharedFuture = future.share();
-            Task task;
-            task._future = sharedFuture;
-            return task;
-        }
-
         IStopTrigger* stopTrigger;
 
     private:
@@ -162,9 +152,14 @@ namespace Nuke::System::Threading::Tasks
         }
     };
 
-    
+
     // 原始同步函数
-    int GetData()
+    int GetData1()
+    {
+        return 0;
+    }
+
+    std::string GetData2()
     {
         return 0;
     }
@@ -173,11 +168,13 @@ namespace Nuke::System::Threading::Tasks
     Task<PackResult<int>> GetDataAsync()
     {
         auto task = TaskFactory::RunAsyncWithException(
-        []()
-        {
-            return GetData();
-        });
+            []()
+            {
+                return GetData1();
+            });
+        
         return task;
     }
+
 
 }
