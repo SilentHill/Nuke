@@ -5,5 +5,5 @@
 
 namespace Nuke::CrossPlatform::TimeZoneApi
 {
-
+    void GetAllTimeZones();
 }

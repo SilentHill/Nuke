@@ -38,5 +38,5 @@
     #define DEV_WARNING(warningMessage) __pragma(message(warningMessage))
 #else 
     //#define DEV_WARNING(warningMessage) _Pragma("GCC warning " warningMessage )
-    #define DEV_WARNING(warningMessage) 
+    #define DEV_WARNING(warningMessage) //#pragma GCC diagnostic warning "-Wformat"
 #endif 

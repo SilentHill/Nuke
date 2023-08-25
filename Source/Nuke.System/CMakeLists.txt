@@ -20,6 +20,7 @@ add_library(Nuke.System STATIC
 "CrossPlatform/ProcessApi.MacOS.cpp"
 "CrossPlatform/NetworkApi.h" "CrossPlatform/NetworkApi.cpp"
 "CrossPlatform/DnsApi.h" "CrossPlatform/DnsApi.cpp"
+"CrossPlatform/TimeZoneApi.h" "CrossPlatform/TimeZoneApi.cpp"
 "CrossPlatform/MiscApi.h" "CrossPlatform/MiscApi.cpp"
 
 

@@ -1,7 +1,8 @@
 ﻿
 #pragma once
 
-#include "TimeSpan.h"
+#include <_pch.h>
+#include <System/TimeSpan.h>
 
 namespace Nuke::System
 {

@@ -2,12 +2,12 @@
 message("【Nuke.Test】配置开始")
 
 # 配置cmake版本
-cmake_minimum_required (VERSION 3.8)
+cmake_minimum_required (VERSION 3.16)
 
 # Nuke预配置
 include ("../Nuke.Cpp.cmake")
 
-enable_testing()
+#enable_testing()
 # find_package(GTest REQUIRED)
 
 
@@ -22,10 +22,10 @@ add_executable (Nuke.Test
 )
 
 # 依赖链接
+add_subdirectory("googletest")
+include_directories("googletest/googletest/include")
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-target_include_directories(Nuke.Test PUBLIC "../SubModules/googletest/googletest/include")
-
 target_precompile_headers(Nuke.Test PRIVATE _pch.h)
 target_link_libraries(Nuke.Test "Nuke.System" "gtest")
 
