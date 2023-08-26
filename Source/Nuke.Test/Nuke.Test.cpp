@@ -13,7 +13,7 @@ int main(int argc, char** argv)
 {
     using namespace Nuke::System::Net;
 
-    Nuke::CrossPlatform::TimeZoneApi::GetAllTimeZones();
+    auto timeZoneIds = Nuke::CrossPlatform::TimeZoneApi::GetTimeZoneIds();
 
     ::testing::InitGoogleTest(&argc, argv);
     int testResult = RUN_ALL_TESTS();
@@ -21,4 +21,3 @@ int main(int argc, char** argv)
     return testResult;
 
 }
- 

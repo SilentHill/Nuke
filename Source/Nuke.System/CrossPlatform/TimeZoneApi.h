@@ -5,5 +5,8 @@
 
 namespace Nuke::CrossPlatform::TimeZoneApi
 {
-    void GetAllTimeZones();
+    std::vector<std::string> GetTimeZoneIds();
+    std::string GetTimeZoneDirectory();
+    std::vector<std::string> ParseTimeZoneIds(std::istream& reader);
+    extern const std::string DefaultTimeZoneDirectory;
 }

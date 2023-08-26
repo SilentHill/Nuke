@@ -20,9 +20,11 @@ add_library(Nuke.System STATIC
 "CrossPlatform/ProcessApi.MacOS.cpp"
 "CrossPlatform/NetworkApi.h" "CrossPlatform/NetworkApi.cpp"
 "CrossPlatform/DnsApi.h" "CrossPlatform/DnsApi.cpp"
-"CrossPlatform/TimeZoneApi.h" "CrossPlatform/TimeZoneApi.cpp"
+"CrossPlatform/TimeZoneApi.h" 
+"CrossPlatform/TimeZoneApi.Windows.cpp"
+"CrossPlatform/TimeZoneApi.Linux.cpp"
+"CrossPlatform/TimeZoneApi.MacOS.cpp"
 "CrossPlatform/MiscApi.h" "CrossPlatform/MiscApi.cpp"
-
 
 "System/Event.h"
 "System/Property.h"
@@ -82,7 +84,7 @@ add_library(Nuke.System STATIC
 
 "System/ServiceModel/ICommunicationObject.h"
 "System/ServiceModel/CommunicationState.h"
- "CrossPlatform/TimeZoneApi.h")
+)
 
 target_precompile_headers(Nuke.System PRIVATE _pch.h)
 target_include_directories(Nuke.System PUBLIC "")
