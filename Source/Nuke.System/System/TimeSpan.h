@@ -39,6 +39,9 @@ namespace Nuke::System
         static const int64_t TicksPerMillisecond = 10000;
         static const int64_t TicksPerMinute = 600000000;
         static const int64_t TicksPerSecond = 10000000;
+        static TimeSpan MaxValue;
+        static TimeSpan MinValue;
+        static TimeSpan Zero;
 
     public: // 比较与哈希
         static bool Equals(const TimeSpan& t1, const TimeSpan& t2);

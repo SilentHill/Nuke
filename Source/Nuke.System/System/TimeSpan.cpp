@@ -7,37 +7,37 @@ namespace Nuke::System
 {
     static_assert(sizeof(TimeSpan) == sizeof(int64_t), "[Nuke编译期异常] 禁止TimeSpan大小超过64位");
 
-    namespace TimeSpanConstants
-    {
-        const int64_t TicksPerMillisecond = 10000;
-        const int64_t TicksPerSecond = TicksPerMillisecond * 1000;   // 10,000,000
-        const int64_t TicksPerMinute = TicksPerSecond * 60;         // 600,000,000
-        const int64_t TicksPerHour = TicksPerMinute * 60;        // 36,000,000,000
-        const int64_t TicksPerDay = TicksPerHour * 24;          // 864,000,000,000
+    const int64_t TicksPerMillisecond = 10000;
+    const int64_t TicksPerSecond = TicksPerMillisecond * 1000;   // 10,000,000
+    const int64_t TicksPerMinute = TicksPerSecond * 60;         // 600,000,000
+    const int64_t TicksPerHour = TicksPerMinute * 60;        // 36,000,000,000
+    const int64_t TicksPerDay = TicksPerHour * 24;          // 864,000,000,000
 
-        const int64_t MaxSeconds = std::numeric_limits<int64_t>::max() / TicksPerSecond;
-        const int64_t MinSeconds = std::numeric_limits<int64_t>::min() / TicksPerSecond;
-        const int64_t MaxMilliSeconds = std::numeric_limits<int64_t>::max() / TicksPerMillisecond;
-        const int64_t MinMilliSeconds = std::numeric_limits<int64_t>::min() / TicksPerMillisecond;
-        const int64_t TicksPerTenthSecond = TicksPerMillisecond * 100;
+    const int64_t MaxSeconds = std::numeric_limits<int64_t>::max() / TicksPerSecond;
+    const int64_t MinSeconds = std::numeric_limits<int64_t>::min() / TicksPerSecond;
+    const int64_t MaxMilliSeconds = std::numeric_limits<int64_t>::max() / TicksPerMillisecond;
+    const int64_t MinMilliSeconds = std::numeric_limits<int64_t>::min() / TicksPerMillisecond;
+    const int64_t TicksPerTenthSecond = TicksPerMillisecond * 100;
 
-        const TimeSpan Zero(0);
+    const TimeSpan Zero(0);
 
-        const TimeSpan MaxValue(std::numeric_limits<int64_t>::max());
-        const TimeSpan MinValue(std::numeric_limits<int64_t>::min());
+    const TimeSpan MaxValue(std::numeric_limits<int64_t>::max());
+    const TimeSpan MinValue(std::numeric_limits<int64_t>::min());
 
-    }
+    TimeSpan TimeSpan::MaxValue(INT64_MAX);
+    TimeSpan TimeSpan::MinValue(INT64_MIN);
+    TimeSpan TimeSpan::Zero(0);
 
     static int64_t TimeToTicks(int32_t hour, int32_t minute, int32_t second)
     {
         int64_t totalSeconds = static_cast<int64_t>(hour) * 3600
             + static_cast<int64_t>(minute) * 60
             + static_cast<int64_t>(second);
-        if (totalSeconds > TimeSpanConstants::MaxSeconds || totalSeconds < TimeSpanConstants::MinSeconds)
+        if (totalSeconds > MaxSeconds || totalSeconds < MinSeconds)
         {
             throw std::out_of_range("TimeSpan too int64_t!");
         }
-        return totalSeconds * TimeSpanConstants::TicksPerSecond;
+        return totalSeconds * TicksPerSecond;
     }
 
     static TimeSpan IntervalFromDoubleTicks(double ticks)
@@ -50,7 +50,7 @@ namespace Nuke::System
         }
         if (ticks == static_cast<double>(std::numeric_limits<int64_t>::max()))
         {
-            return TimeSpanConstants::MaxValue;
+            return MaxValue;
         }
         return TimeSpan((int64_t)ticks);
     }
@@ -100,11 +100,11 @@ namespace Nuke::System
             + static_cast<int64_t>(hours) * 3600
             + static_cast<int64_t>(minutes) * 60 + seconds) * 1000
             + milliseconds;
-        if (totalMilliSeconds > TimeSpanConstants::MaxMilliSeconds || totalMilliSeconds < TimeSpanConstants::MinMilliSeconds)
+        if (totalMilliSeconds > MaxMilliSeconds || totalMilliSeconds < MinMilliSeconds)
         {
             throw std::out_of_range("TimeSpan too int64_t!");
         }
-        _ticks = (int64_t)totalMilliSeconds * TimeSpanConstants::TicksPerMillisecond;
+        _ticks = (int64_t)totalMilliSeconds * TicksPerMillisecond;
     }
 
     bool TimeSpan::Equals(const TimeSpan& t1, const TimeSpan& t2)
@@ -129,50 +129,50 @@ namespace Nuke::System
 
     int32_t TimeSpan::Days() const
     {
-        return (int32_t)(_ticks / TimeSpanConstants::TicksPerDay);
+        return (int32_t)(_ticks / TicksPerDay);
     }
 
     int32_t TimeSpan::Hours() const
     {
-        return (int32_t)((_ticks / TimeSpanConstants::TicksPerHour) % 24);
+        return (int32_t)((_ticks / TicksPerHour) % 24);
     }
 
     int32_t TimeSpan::Milliseconds() const
     {
-        return (int32_t)((_ticks / TimeSpanConstants::TicksPerMillisecond) % 1000);
+        return (int32_t)((_ticks / TicksPerMillisecond) % 1000);
     }
 
     int32_t TimeSpan::Minutes() const
     {
-        return (int32_t)((_ticks / TimeSpanConstants::TicksPerMinute) % 60);
+        return (int32_t)((_ticks / TicksPerMinute) % 60);
     }
 
     int32_t TimeSpan::Seconds() const
     {
-        return (int32_t)((_ticks / TimeSpanConstants::TicksPerSecond) % 60);
+        return (int32_t)((_ticks / TicksPerSecond) % 60);
     }
 
     double TimeSpan::TotalDays() const
     {
-        return ((double)_ticks) / TimeSpanConstants::TicksPerDay;
+        return ((double)_ticks) / TicksPerDay;
     }
 
     double TimeSpan::TotalHours() const
     {
-        return (double)_ticks / TimeSpanConstants::TicksPerHour;
+        return (double)_ticks / TicksPerHour;
     }
 
     double TimeSpan::TotalMilliseconds() const
     {
-        double temp = (double)_ticks / TimeSpanConstants::TicksPerMillisecond;
-        if (temp > TimeSpanConstants::MaxMilliSeconds)
+        double temp = (double)_ticks / TicksPerMillisecond;
+        if (temp > MaxMilliSeconds)
         {
-            return (double)TimeSpanConstants::MaxMilliSeconds;
+            return (double)MaxMilliSeconds;
         }
 
-        if (temp < TimeSpanConstants::MinMilliSeconds)
+        if (temp < MinMilliSeconds)
         {
-            return (double)TimeSpanConstants::MinMilliSeconds;
+            return (double)MinMilliSeconds;
         }
 
         return temp;
@@ -181,14 +181,14 @@ namespace Nuke::System
 
     double TimeSpan::TotalMinutes() const
     {
-        return (double)_ticks / TimeSpanConstants::TicksPerMinute;
+        return (double)_ticks / TicksPerMinute;
     }
 
     double TimeSpan::TotalSeconds() const
     {
-        return (double)_ticks / TimeSpanConstants::TicksPerSecond;
+        return (double)_ticks / TicksPerSecond;
     }
-    
+
     std::string TimeSpan::ToString() const
     {
         char buffer[64];
@@ -199,7 +199,7 @@ namespace Nuke::System
         auto msPerSecond = 1000;
 
         int32_t hour = totalMs / msPerHour;
-        int32_t minute = (totalMs - hour* msPerHour)/ msPerMinute;
+        int32_t minute = (totalMs - hour * msPerHour) / msPerMinute;
         int32_t second = (totalMs - hour * msPerHour - minute * msPerMinute) / msPerSecond;
         int32_t ms = (totalMs - hour * msPerHour - minute * msPerMinute - second * msPerSecond);
         sprintf(buffer, "%d:%d:%d,%d", hour, minute, second, ms);
@@ -232,12 +232,12 @@ namespace Nuke::System
     }
     TimeSpan TimeSpan::FromDays(double value)
     {
-        return Interval(value, TimeSpanConstants::TicksPerDay);
+        return Interval(value, TicksPerDay);
     }
 
     TimeSpan TimeSpan::Duration() const
     {
-        if (Ticks() == TimeSpanConstants::MinValue.Ticks())
+        if (Ticks() == MinValue.Ticks())
         {
             throw std::overflow_error("duration overflow");
         }
@@ -246,22 +246,22 @@ namespace Nuke::System
 
     TimeSpan TimeSpan::FromHours(double value)
     {
-        return Interval(value, TimeSpanConstants::TicksPerHour);
+        return Interval(value, TicksPerHour);
     }
 
     TimeSpan TimeSpan::FromMilliseconds(double value)
     {
-        return Interval(value, TimeSpanConstants::TicksPerMillisecond);
+        return Interval(value, TicksPerMillisecond);
     }
 
     TimeSpan TimeSpan::FromMinutes(double value)
     {
-        return Interval(value, TimeSpanConstants::TicksPerMinute);
+        return Interval(value, TicksPerMinute);
     }
 
     TimeSpan TimeSpan::FromSeconds(double value)
     {
-        return Interval(value, TimeSpanConstants::TicksPerSecond);
+        return Interval(value, TicksPerSecond);
     }
 
     TimeSpan TimeSpan::FromTicks(int64_t value)
@@ -295,7 +295,7 @@ namespace Nuke::System
 
     TimeSpan TimeSpan::operator -()
     {
-        if (_ticks == TimeSpanConstants::MinValue._ticks)
+        if (_ticks == MinValue._ticks)
         {
             throw std::overflow_error("negate tows compnum");
         }

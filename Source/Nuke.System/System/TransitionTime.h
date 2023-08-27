@@ -5,22 +5,28 @@
 
 namespace Nuke::System
 {
+    /// <summary>
+    /// 提供有关特定时区中特定时间更改（例如从夏时制更改为标准时间，或者从标准时间更改为夏时制）的信息
+    /// </summary>
     class TransitionTime
     {
     public:
-        int Day();
-        DayOfWeek DayOfWeek();
-        bool IsFixedDateRule();
-        int Month();
-        DateTime TimeOfDay();
-        int Week();
+        int Day() const;
+        DayOfWeek DayOfWeek() const;
+        bool IsFixedDateRule() const;
+        int Month() const;
+        DateTime TimeOfDay() const;
+        int Week() const;
         static TransitionTime CreateFixedDateRule(DateTime timeOfDay, int month, int day);
         static TransitionTime CreateFloatingDateRule(DateTime timeOfDay, int month, int week, System::DayOfWeek dayOfWeek);
-        bool Equals(const TransitionTime& other);
+        bool Equals(const TransitionTime& other) const;
 
     private:
-        TransitionTime();
+        friend class AdjustmentRule;
+        TransitionTime(DateTime timeOfDay, int32_t month, int32_t week, int32_t day, System::DayOfWeek dayOfWeek, bool isFixedDateRule);
         ~TransitionTime();
+        TransitionTime(const TransitionTime& trainsitionTime) = default;
+        TransitionTime(TransitionTime&& trainsitionTime) = default;
         class TransitionTimeInternals;
         TransitionTimeInternals* internals;
     };
