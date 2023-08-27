@@ -217,7 +217,7 @@ namespace Nuke::System
         return TimeSpan(result);
     }
 
-    int32_t TimeSpan::CompareTo(TimeSpan value)
+    int32_t TimeSpan::CompareTo(TimeSpan value) const
     {
         int64_t t = value._ticks;
         if (_ticks > t)

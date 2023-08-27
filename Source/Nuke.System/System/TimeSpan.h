@@ -62,13 +62,13 @@ namespace Nuke::System
         TimeSpan operator +(const TimeSpan& t2);
         TimeSpan operator *(double factor);
         TimeSpan operator /(double divisor);
-        double operator /(const TimeSpan& t2);
-        bool operator ==(const TimeSpan& t2);
-        bool operator !=(const TimeSpan& t2);
-        bool operator <(const TimeSpan& t2);
-        bool operator <=(const TimeSpan& t2);
-        bool operator >(const TimeSpan& t2);
-        bool operator >=(const TimeSpan& t2);
+        double operator /(const TimeSpan& t2) const;
+        bool operator ==(const TimeSpan& t2) const;
+        bool operator !=(const TimeSpan& t2) const;
+        bool operator <(const TimeSpan& t2) const;
+        bool operator <=(const TimeSpan& t2) const;
+        bool operator >(const TimeSpan& t2) const;
+        bool operator >=(const TimeSpan& t2) const;
 
     public: // 属性方法
         int64_t Ticks() const;
@@ -87,7 +87,7 @@ namespace Nuke::System
         std::string ToString() const;
 
     public: // 方法
-        int32_t CompareTo(TimeSpan value);
+        int32_t CompareTo(TimeSpan value) const;
         static TimeSpan FromDays(double value);
         TimeSpan Duration() const;
 

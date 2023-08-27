@@ -86,29 +86,6 @@ namespace Nuke::System
         }
     }
 
-    TimeZoneInfo CreateTimeZoneInfo(
-        const std::string& id,
-        TimeSpan baseUtcOffset,
-        const std::string& displayName,
-        const std::string& standardDisplayName,
-        const std::string& daylightDisplayName,
-        const std::vector<AdjustmentRule> adjustmentRules,
-        bool disableDaylightSavingTime,
-        bool hasIanaId = false)
-    {
-        TimeZoneInfo timeZoneInfo;
-        ValidateTimeZoneInfo(id, baseUtcOffset, adjustmentRules, out bool adjustmentRulesSupportDst);
-
-        timeZoneInfo._id = id;
-        timeZoneInfo._baseUtcOffset = baseUtcOffset;
-        timeZoneInfo._displayName = displayName ? ? string.Empty;
-        timeZoneInfo._standardDisplayName = standardDisplayName ? ? string.Empty;
-        timeZoneInfo._daylightDisplayName = disableDaylightSavingTime ? string.Empty : daylightDisplayName ? ? string.Empty;
-        timeZoneInfo._supportsDaylightSavingTime = adjustmentRulesSupportDst && !disableDaylightSavingTime;
-        timeZoneInfo._adjustmentRules = adjustmentRules;
-
-        HasIanaId = _id.Equals(UtcId, StringComparison.OrdinalIgnoreCase) ? true : hasIanaId;
-    }
 
     static std::string GetUtcStandardDisplayName()
     {
