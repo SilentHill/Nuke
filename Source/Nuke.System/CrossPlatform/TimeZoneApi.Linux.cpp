@@ -53,10 +53,10 @@ namespace Nuke::CrossPlatform::TimeZoneApi
         {
             if (!zoneTabFileLine.empty() && zoneTabFileLine[0] != '#')
             {
-                // the format of the line is "ISO 3166 territory code \t coordinates \t TimeZone Id \t comments"
+                // 行格式 "ISO 3166 领地码 \t coordinates \t TimeZone Id \t comments"
 
                 int firstTabIndex = zoneTabFileLine.find('\t');
-                if (firstTabIndex >= 0)
+                               if (firstTabIndex >= 0)
                 {
                     int secondTabIndex = zoneTabFileLine.find('\t', firstTabIndex + 1);
                     if (secondTabIndex >= 0)

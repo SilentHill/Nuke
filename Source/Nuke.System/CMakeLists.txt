@@ -41,6 +41,8 @@ add_library(Nuke.System STATIC
 "System/DateTime.h" "System/DateTime.cpp" 
 "System/TimeZoneInfo.h"  "System/TimeZoneInfo.cpp" 
 "System/TimeSpan.h"  "System/TimeSpan.cpp" 
+"System/TransitionTime.h"  "System/TransitionTime.cpp" 
+"System/AdjustmentRule.h"  "System/AdjustmentRule.cpp" 
 "System/Guid.cpp" "System/Guid.h" 
 "System/Environment.cpp" "System/Environment.h" 
 

@@ -1,15 +1,17 @@
 ﻿
 #pragma once
 
-#include "DateTime.h"
+#include <System/DateTime.h>
+
 namespace Nuke::System
 {
 	class TimeZoneInfo
 	{
-    public:
-
+	public:
 
 	private:
-		
+		TimeZoneInfo();
+		class TimeZoneInfoInternals;
+		TimeZoneInfoInternals* internals;
 	};
 }

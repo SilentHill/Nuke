@@ -259,47 +259,23 @@ namespace Nuke::System
 
     void GetDate(const DateTime& dateTime, int32_t& year, int32_t& month, int32_t& day)
     {
-        uint32_t n = (uint32_t)(UTicks(dateTime) / DateTimeConst::TicksPerDay);
+        // y100 = number of whole 100-year periods since 3/1/0000
+            // r1 = (day number within 100-year period) * 4
+        (uint y100, uint r1) = Math.DivRem(((uint)(UTicks / TicksPer6Hours) | 3U) + 1224, DaysPer400Years);
+        ulong u2 = (ulong)Math.BigMul((int)EafMultiplier, (int)r1 | 3);
+        ushort daySinceMarch1 = (ushort)((uint)u2 / EafDivider);
+        int n3 = 2141 * daySinceMarch1 + 197913;
+        year = (int)(100 * y100 + (uint)(u2 >> 32));
+        // compute month and day
+        month = (ushort)(n3 >> 16);
+        day = (ushort)n3 / 2141 + 1;
 
-        uint32_t y400 = n / DateTimeConst::DaysPer400Years;
-
-        n -= y400 * DateTimeConst::DaysPer400Years;
-
-        uint32_t y100 = n / DateTimeConst::DaysPer100Years;
-
-        if (y100 == 4)
+        // rollover December 31
+        if (daySinceMarch1 >= March1BasedDayOfNewYear)
         {
-            y100 = 3;
+            ++year;
+            month -= 12;
         }
-
-        n -= y100 * DateTimeConst::DaysPer100Years;
-
-        uint32_t y4 = n / DateTimeConst::DaysPer4Years;
-
-        n -= y4 * DateTimeConst::DaysPer4Years;
-
-        uint32_t y1 = n / DateTimeConst::DaysPerYear;
-
-        if (y1 == 4)
-        {
-            y1 = 3;
-        }
-
-        year = (int32_t)(y400 * 400 + y100 * 100 + y4 * 4 + y1 + 1);
-
-        n -= y1 * DateTimeConst::DaysPerYear;
-
-        auto days = y1 == 3 && (y4 != 24 || y100 == 3) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
-
-        uint32_t m = (n >> 5) + 1;
-
-        while (n >= days[m])
-        {
-            m++;
-        }
-
-        month = (int32_t)m;
-        day = (int32_t)(n - days[m - 1] + 1);
     }
     int32_t GetDatePart(const DateTime& dateTime, int32_t part)
     {

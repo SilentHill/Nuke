@@ -293,7 +293,7 @@ namespace Nuke::System
         return *this / ts;
     }
 
-    TimeSpan TimeSpan::operator -(int)
+    TimeSpan TimeSpan::operator -()
     {
         if (_ticks == TimeSpanConstants::MinValue._ticks)
         {
@@ -307,7 +307,7 @@ namespace Nuke::System
         return this->Subtract(t2);
     }
 
-    TimeSpan TimeSpan::operator +(int)
+    TimeSpan TimeSpan::operator +()
     {
         return *this;
     }

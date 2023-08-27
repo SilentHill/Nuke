@@ -1,6 +1,8 @@
 ﻿
 #pragma once
 
+#include <_pch.h>
+
 namespace Nuke::System
 {
     // 表示一个基于tick的时间间隔
@@ -29,6 +31,15 @@ namespace Nuke::System
         static TimeSpan FromSeconds(double value); 
         static TimeSpan FromTicks(int64_t value);
 
+    public: // 静态常量
+        static const int64_t NanosecondsPerTick = 100;
+        static const int64_t TicksPerDay = 864000000000;
+        static const int64_t TicksPerHour = 36000000000;
+        static const int64_t TicksPerMicrosecond = 10;
+        static const int64_t TicksPerMillisecond = 10000;
+        static const int64_t TicksPerMinute = 600000000;
+        static const int64_t TicksPerSecond = 10000000;
+
     public: // 比较与哈希
         static bool Equals(const TimeSpan& t1, const TimeSpan& t2);
         bool Equals(const TimeSpan& timeSpan) const;
@@ -42,9 +53,9 @@ namespace Nuke::System
         double Divide(const TimeSpan& ts);
         
     public: // 加减乘除重载
-        TimeSpan operator -(int);
+        TimeSpan operator -();
         TimeSpan operator -(const TimeSpan& t2);
-        TimeSpan operator +(int);
+        TimeSpan operator +();
         TimeSpan operator +(const TimeSpan& t2);
         TimeSpan operator *(double factor);
         TimeSpan operator /(double divisor);
