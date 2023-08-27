@@ -18,86 +18,91 @@ namespace Nuke::System
     static_assert(sizeof(DateTime) == sizeof(uint64_t), "[静态断言] DateTime大小禁止超过64位");
 
     // DateTime常量集
-    namespace DateTimeConst
+    // 每毫秒的微秒数
+    const int32_t MicrosecondsPerMillisecond = 1000;
+    const int64_t TicksPerMicrosecond = 10;
+    const int64_t TicksPerMillisecond = TicksPerMicrosecond * MicrosecondsPerMillisecond;
+
+    // 每单位的Tick数
+    const int32_t HoursPerDay = 24;
+    const int64_t TicksPerSecond = TicksPerMillisecond * 1000;
+    const int64_t TicksPerMinute = TicksPerSecond * 60;
+    const int64_t TicksPerHour = TicksPerMinute * 60;
+    const int64_t TicksPerDay = TicksPerHour * HoursPerDay;
+
+    // 每单位的毫秒数
+    const int32_t MillisPerSecond = 1000;
+    const int32_t MillisPerMinute = MillisPerSecond * 60;
+    const int32_t MillisPerHour = MillisPerMinute * 60;
+    const int32_t MillisPerDay = MillisPerHour * HoursPerDay;
+
+    // 每单位的天数
+    const int32_t DaysPerYear = 365;
+    const int32_t DaysPer4Years = DaysPerYear * 4 + 1;       // 1461
+    const int32_t DaysPer100Years = DaysPer4Years * 25 - 1;  // 36524
+    const int32_t DaysPer400Years = DaysPer100Years * 4 + 1; // 146097
+
+    const int32_t DaysTo1601 = DaysPer400Years * 4;          // 584388
+    const int32_t DaysTo1899 = DaysPer400Years * 4 + DaysPer100Years * 3 - 367;
+    const int32_t DaysTo1970 = DaysPer400Years * 4 + DaysPer100Years * 3 + DaysPer4Years * 17 + DaysPerYear; // 719,162
+    const int32_t DaysTo10000 = DaysPer400Years * 25 - 366;  // 3652059
+
+    // Tick范围值
+    const int64_t MinTicks = 0;
+    const int64_t MaxTicks = DaysTo10000 * TicksPerDay - 1;
+    const int64_t MaxMicroseconds = MaxTicks / TicksPerMicrosecond;
+    const int64_t MaxMillis = MaxTicks / TicksPerMillisecond;
+    const int64_t MaxSeconds = MaxTicks / TicksPerSecond;
+    const int64_t MaxMinutes = MaxTicks / TicksPerMinute;
+    const int64_t MaxHours = MaxTicks / TicksPerHour;
+    const int64_t MaxDays = (long)DaysTo10000 - 1;
+
+    const int64_t UnixEpochTicks = DaysTo1970 * TicksPerDay;
+    const int64_t FileTimeOffset = DaysTo1601 * TicksPerDay;
+    const int64_t DoubleDateOffset = DaysTo1899 * TicksPerDay;
+
+    const uint32_t EafMultiplier = (uint32_t)(((1UL << 32) + DaysPer4Years - 1) / DaysPer4Years);   // 2,939,745
+    const uint32_t EafDivider = EafMultiplier * 4;
+    const uint64_t TicksPer6Hours = TicksPerHour * 6;
+    const int32_t March1BasedDayOfNewYear = 306;              // 3月1日到1月1日
+
+    const uint32_t DaysToMonth365[13] =
     {
-        // 每单位的Tick数
-        const int64_t TicksPerMicrosecond = 10;
-        const int64_t TicksPerMillisecond = TicksPerMicrosecond * 1000;
-        const int64_t TicksPerSecond = TicksPerMillisecond * 1000;
-        const int64_t TicksPerMinute = TicksPerSecond * 60;
-        const int64_t TicksPerHour = TicksPerMinute * 60;
-        const int64_t TicksPerDay = TicksPerHour * 24;
-
-        // 每单位的毫秒数
-        const int32_t MillisPerSecond = 1000;
-        const int32_t MillisPerMinute = MillisPerSecond * 60;
-        const int32_t MillisPerHour = MillisPerMinute * 60;
-        const int32_t MillisPerDay = MillisPerHour * 24;
-
-        // 每单位的天数
-        const int32_t DaysPerYear = 365;
-        const int32_t DaysPer4Years = DaysPerYear * 4 + 1;       // 1461
-        const int32_t DaysPer100Years = DaysPer4Years * 25 - 1;  // 36524
-        const int32_t DaysPer400Years = DaysPer100Years * 4 + 1; // 146097
-
-        const int32_t DaysTo1601 = DaysPer400Years * 4;          // 584388
-        const int32_t DaysTo1899 = DaysPer400Years * 4 + DaysPer100Years * 3 - 367;
-        const int32_t DaysTo1970 = DaysPer400Years * 4 + DaysPer100Years * 3 + DaysPer4Years * 17 + DaysPerYear; // 719,162
-        const int32_t DaysTo10000 = DaysPer400Years * 25 - 366;  // 3652059
-
-        // Tick范围值
-        const int64_t MinTicks = 0;
-        const int64_t MaxTicks = DaysTo10000 * TicksPerDay - 1;
-
-        // 毫秒最大值
-        const int64_t MaxMillis = (int64_t)DaysTo10000 * MillisPerDay;
-
-        // unit时间戳
-        const int64_t UnixEpochTicks = DaysTo1970 * TicksPerDay;
-        const int64_t FileTimeOffset = DaysTo1601 * TicksPerDay;
-        const int64_t DoubleDateOffset = DaysTo1899 * TicksPerDay;
-
-        const int32_t DatePartYear = 0;
-        const int32_t DatePartDayOfYear = 1;
-        const int32_t DatePartMonth = 2;
-        const int32_t DatePartDay = 3;
-
-        const uint32_t s_daysToMonth365[13] =
-        {
-            0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
-        };
-
-        const uint32_t s_daysToMonth366[13] =
-        {
-            0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366
-        };
-
-        const uint8_t DaysInMonth365[12] =
-        {
-            31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-        };
-
-        const uint8_t DaysInMonth366[12] =
-        {
-            31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
-        };
-
-        const uint64_t TicksMask = 0x3FFFFFFFFFFFFFFF;
-        const uint64_t FlagsMask = 0xC000000000000000;
-        const int64_t TicksCeiling = 0x4000000000000000;
-        const uint64_t KindUnspecified = 0x0000000000000000;
-        const uint64_t KindUtc = 0x4000000000000000;
-        const uint64_t KindLocal = 0x8000000000000000;
-        const uint64_t KindLocalAmbiguousDst = 0xC000000000000000;
-        const int32_t KindShift = 62;
-
+        0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365
     };
+
+    const uint32_t DaysToMonth366[13] =
+    {
+        0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366
+    };
+
+    const uint8_t DaysInMonth365[12] =
+    {
+        31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    };
+
+    const uint8_t DaysInMonth366[12] =
+    {
+        31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+    };
+
+    const uint64_t TicksMask = 0x3FFFFFFFFFFFFFFF;
+    const uint64_t FlagsMask = 0xC000000000000000;
+    const int64_t TicksCeiling = 0x4000000000000000;
+    const uint64_t KindUnspecified = 0x0000000000000000;
+    const uint64_t KindUtc = 0x4000000000000000;
+    const uint64_t KindLocal = 0x8000000000000000;
+    const uint64_t KindLocalAmbiguousDst = 0xC000000000000000;
+    const int32_t KindShift = 62;
+
+    const std::string TicksField = "ticks"; // 序列化用
+    const std::string DateDataField = "dateData"; // 序列化用
 
     const bool s_systemSupportsLeapSeconds = false;
 
     const DateTime DateTime::MinValue;
-    const DateTime DateTime::MaxValue(DateTimeConst::MaxTicks, DateTimeKind::Unspecified);
-    const DateTime DateTime::UnixEpoch(DateTimeConst::UnixEpochTicks, DateTimeKind::Utc);
+    const DateTime DateTime::MaxValue(MaxTicks, DateTimeKind::Unspecified);
+    const DateTime DateTime::UnixEpoch(UnixEpochTicks, DateTimeKind::Utc);
 
     std::out_of_range       _tickOutOfRange("out of ticks range. ");
     std::out_of_range       _millisecondsOutOfRange("out of milliseconds range. ");
@@ -119,14 +124,14 @@ namespace Nuke::System
             throw _invalidYearMonthDay;
         }
 
-        auto& days = DateTime::IsLeapYear(year) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
+        auto& days = DateTime::IsLeapYear(year) ? DaysToMonth366 : DaysToMonth365;
         if ((uint32_t)day > days[month] - days[month - 1])
         {
             throw _invalidYearMonthDay;
         }
 
         uint32_t n = DaysToYear((uint32_t)year) + days[month - 1] + (uint32_t)day - 1;
-        return n * (uint64_t)DateTimeConst::TicksPerDay;
+        return n * (uint64_t)TicksPerDay;
     }
     static uint64_t TimeToTicks(int32_t hour, int32_t minute, int32_t second)
     {
@@ -136,11 +141,11 @@ namespace Nuke::System
         }
 
         int totalSeconds = hour * 3600 + minute * 60 + second;
-        return (uint32_t)totalSeconds * (uint64_t)DateTimeConst::TicksPerSecond;
+        return (uint32_t)totalSeconds * (uint64_t)TicksPerSecond;
     }
     static uint64_t Init(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, int32_t millisecond, DateTimeKind kind = DateTimeKind::Unspecified)
     {
-        if ((uint32_t)millisecond >= DateTimeConst::MillisPerSecond)
+        if ((uint32_t)millisecond >= MillisPerSecond)
         {
             throw  _millisecondsOutOfRange;
         }
@@ -149,8 +154,8 @@ namespace Nuke::System
             throw _invalidKind;
         }
         uint64_t ticks = DateToTicks(year, month, day) + TimeToTicks(hour, minute, second);
-        ticks += (uint32_t)millisecond * (uint32_t)DateTimeConst::TicksPerMillisecond;
-        return ticks | ((uint64_t)kind << DateTimeConst::KindShift);
+        ticks += (uint32_t)millisecond * (uint32_t)TicksPerMillisecond;
+        return ticks | ((uint64_t)kind << KindShift);
 
     }
     DateTime::DateTime()
@@ -161,7 +166,7 @@ namespace Nuke::System
     DateTime::DateTime(int64_t ticks)
     {
         auto uticks = static_cast<uint64_t>(ticks);
-        if (uticks > DateTimeConst::MaxTicks)
+        if (uticks > MaxTicks)
         {
             throw _tickOutOfRange;
         }
@@ -171,7 +176,7 @@ namespace Nuke::System
     DateTime::DateTime(int64_t ticks, DateTimeKind kind)
     {
         auto uticks = static_cast<uint64_t>(ticks);
-        if (uticks > DateTimeConst::MaxTicks)
+        if (uticks > MaxTicks)
         {
             throw _tickOutOfRange;
         }
@@ -181,7 +186,7 @@ namespace Nuke::System
         {
             throw _invalidKind;
         }
-        _dateData = uticks | (static_cast<uint64_t>(ukind) << DateTimeConst::KindShift);
+        _dateData = uticks | (static_cast<uint64_t>(ukind) << KindShift);
     }
 
     DateTime::DateTime(int32_t year, int32_t month, int32_t day)
@@ -197,7 +202,7 @@ namespace Nuke::System
     DateTime::DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, DateTimeKind kind)
     {
         auto ukind = static_cast<uint32_t>(kind);
-        _dateData = DateToTicks(year, month, day) + TimeToTicks(hour, minute, second) | (static_cast<uint64_t>(ukind) << DateTimeConst::KindShift);
+        _dateData = DateToTicks(year, month, day) + TimeToTicks(hour, minute, second) | (static_cast<uint64_t>(ukind) << KindShift);
     }
 
     DateTime::DateTime(int32_t year, int32_t month, int32_t day, int32_t hour, int32_t minute, int32_t second, int32_t millisecond)
@@ -230,12 +235,12 @@ namespace Nuke::System
 
     uint64_t InternalKind(uint64_t dateTimeData)
     {
-        return dateTimeData & DateTimeConst::FlagsMask;
+        return dateTimeData & FlagsMask;
     }
 
     uint64_t InternalTicks(uint64_t dateTimeData)
     {
-        return dateTimeData & DateTimeConst::TicksMask;
+        return dateTimeData & TicksMask;
     }
 
 
@@ -244,11 +249,11 @@ namespace Nuke::System
     DateTime _Add(const DateTime& dateTime, double value, int32_t scale)
     {
         double millis_double = value * scale + (value >= 0 ? 0.5 : -0.5);
-        if (millis_double <= -DateTimeConst::MaxMillis || millis_double >= DateTimeConst::MaxMillis)
+        if (millis_double <= -MaxMillis || millis_double >= MaxMillis)
         {
             throw std::out_of_range("millis");
         }
-        return dateTime.AddTicks((int64_t)millis_double * DateTimeConst::TicksPerMillisecond);
+        return dateTime.AddTicks((int64_t)millis_double * TicksPerMillisecond);
 
     }
 
@@ -261,8 +266,9 @@ namespace Nuke::System
     {
         // y100 = number of whole 100-year periods since 3/1/0000
             // r1 = (day number within 100-year period) * 4
-        (uint y100, uint r1) = Math.DivRem(((uint)(UTicks / TicksPer6Hours) | 3U) + 1224, DaysPer400Years);
-        ulong u2 = (ulong)Math.BigMul((int)EafMultiplier, (int)r1 | 3);
+
+        auto [y100, r1] = Math::DivRem(((uint32_t)(dateTime.Ticks() / TicksPer6Hours) | 3U) + 1224, DaysPer400Years);
+        uint64_t u2 = (uint64_t)Math::BigMul((int)EafMultiplier, (int)r1 | 3);
         ushort daySinceMarch1 = (ushort)((uint)u2 / EafDivider);
         int n3 = 2141 * daySinceMarch1 + 197913;
         year = (int)(100 * y100 + (uint)(u2 >> 32));
@@ -277,67 +283,25 @@ namespace Nuke::System
             month -= 12;
         }
     }
-    int32_t GetDatePart(const DateTime& dateTime, int32_t part)
-    {
-        uint32_t n = (uint32_t)(UTicks(dateTime) / DateTimeConst::TicksPerDay);
-
-        uint32_t y400 = n / DateTimeConst::DaysPer400Years;
-
-        n -= y400 * DateTimeConst::DaysPer400Years;
-
-        uint32_t y100 = n / DateTimeConst::DaysPer100Years;
-
-        if (y100 == 4) y100 = 3;
-
-        n -= y100 * DateTimeConst::DaysPer100Years;
-
-        uint32_t y4 = n / DateTimeConst::DaysPer4Years;
-
-        n -= y4 * DateTimeConst::DaysPer4Years;
-
-        uint32_t y1 = n / DateTimeConst::DaysPerYear;
-
-        if (y1 == 4) y1 = 3;
-
-        if (part == DateTimeConst::DatePartYear)
-        {
-            return (int32_t)(y400 * 400 + y100 * 100 + y4 * 4 + y1 + 1);
-        }
-
-        n -= y1 * DateTimeConst::DaysPerYear;
-
-        if (part == DateTimeConst::DatePartDayOfYear) return (int32_t)n + 1;
-
-        auto& days = y1 == 3 && (y4 != 24 || y100 == 3) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
-
-        uint32_t m = (n >> 5) + 1;
-
-        while (n >= days[m]) m++;
-
-        if (part == DateTimeConst::DatePartMonth) return (int32_t)m;
-
-        return (int32_t)(n - days[m - 1] + 1);
-    }
-
     DateTime DateTime::ToLocalTime()
     {
         throw std::runtime_error("no implemented");
-        //if ((_dateData & DateTimeConst::KindLocal) != 0)
+        //if ((_dateData & KindLocal) != 0)
         //{
         //    return *this;
         //}
         //bool isAmbiguousLocalDst;
         //int64_t offset = TimeZoneInfo::GetUtcOffsetFromUtc(this, TimeZoneInfo::Local,  _, isAmbiguousLocalDst).Ticks();
         //int64_t tick = Ticks() + offset;
-        //if ((uint64_t)tick <= DateTimeConst::MaxTicks)
+        //if ((uint64_t)tick <= MaxTicks)
         //{
         //    if (!isAmbiguousLocalDst)
         //    {
-        //        return DateTime((uint64_t)tick | DateTimeConst::KindLocal);
+        //        return DateTime((uint64_t)tick | KindLocal);
         //    }
-        //    return DateTime((uint64_t)tick | DateTimeConst::KindLocalAmbiguousDst);
+        //    return DateTime((uint64_t)tick | KindLocalAmbiguousDst);
         //}
-        //return DateTime(tick < 0 ? DateTimeConst::KindLocal : DateTimeConst::MaxTicks | DateTimeConst::KindLocal);
+        //return DateTime(tick < 0 ? KindLocal : MaxTicks | KindLocal);
     }
     DateTime DateTime::FromFileTime(int64_t fileTime)
     {
@@ -363,21 +327,21 @@ namespace Nuke::System
     DateTime CreateDateTimeFromSystemTime(SYSTEMTIME time, uint64_t hundredNanoSecond)
     {
         uint32_t year = time.wYear;
-        auto& days = DateTime::IsLeapYear((int32_t)year) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
+        auto& days = DateTime::IsLeapYear((int32_t)year) ? s_daysToMonth366 : s_daysToMonth365;
         int32_t month = time.wMonth - 1;
         uint32_t n = DaysToYear(year) + days[month] + time.wDay - 1;
-        uint64_t ticks = n * (uint64_t)DateTimeConst::TicksPerDay;
+        uint64_t ticks = n * (uint64_t)TicksPerDay;
 
-        ticks += time.wHour * (uint64_t)DateTimeConst::TicksPerHour;
-        ticks += time.wMinute * (uint64_t)DateTimeConst::TicksPerMinute;
+        ticks += time.wHour * (uint64_t)TicksPerHour;
+        ticks += time.wMinute * (uint64_t)TicksPerMinute;
         uint32_t second = time.wSecond;
         if (second <= 59)
         {
-            uint64_t tmp = second * (uint32_t)DateTimeConst::TicksPerSecond + time.wMilliseconds * (uint32_t)DateTimeConst::TicksPerMillisecond + hundredNanoSecond;
-            return DateTime(ticks + tmp | DateTimeConst::KindUtc);
+            uint64_t tmp = second * (uint32_t)TicksPerSecond + time.wMilliseconds * (uint32_t)TicksPerMillisecond + hundredNanoSecond;
+            return DateTime(ticks + tmp | KindUtc);
         }
 
-        ticks += DateTimeConst::TicksPerMinute - 1 | DateTimeConst::KindUtc;
+        ticks += TicksPerMinute - 1 | KindUtc;
         return DateTime(ticks);
     }
     DateTime FromFileTimeLeapSecondsAware_Windows(uint64_t fileTime)
@@ -387,7 +351,7 @@ namespace Nuke::System
         {
             throw std::invalid_argument("bad file time");
         }
-        return CreateDateTimeFromSystemTime(time, fileTime % DateTimeConst::TicksPerMillisecond);
+        return CreateDateTimeFromSystemTime(time, fileTime % TicksPerMillisecond);
     }
 #endif
     DateTime FromFileTimeLeapSecondsAware(uint64_t fileTime)
@@ -402,7 +366,7 @@ namespace Nuke::System
     }
     DateTime DateTime::FromFileTimeUtc(int64_t fileTime)
     {
-        if ((uint64_t)fileTime > DateTimeConst::MaxTicks - DateTimeConst::FileTimeOffset)
+        if ((uint64_t)fileTime > MaxTicks - FileTimeOffset)
         {
             throw std::out_of_range("file time out of range");
         }
@@ -413,8 +377,8 @@ namespace Nuke::System
             return FromFileTimeLeapSecondsAware((uint64_t)fileTime);
         }
 
-        uint64_t universalTicks = (uint64_t)fileTime + DateTimeConst::FileTimeOffset;
-        return DateTime(universalTicks | DateTimeConst::KindUtc);
+        uint64_t universalTicks = (uint64_t)fileTime + FileTimeOffset;
+        return DateTime(universalTicks | KindUtc);
     }
 
     DateTime& DateTime::operator=(const DateTime& dateTime)
@@ -459,7 +423,7 @@ namespace Nuke::System
             throw std::invalid_argument("bad month");
         }
 
-        return (IsLeapYear(year) ? DateTimeConst::DaysInMonth366 : DateTimeConst::DaysInMonth365)[month - 1];
+        return (IsLeapYear(year) ? DaysInMonth366 : DaysInMonth365)[month - 1];
     }
     DateTime DateTime::SpecifyKind(DateTime value, DateTimeKind kind)
     {
@@ -467,14 +431,14 @@ namespace Nuke::System
         {
             throw std::invalid_argument("bad datetimekind");
         }
-        return DateTime(UTicks(value) | ((uint64_t)kind << DateTimeConst::KindShift));
+        return DateTime(UTicks(value) | ((uint64_t)kind << KindShift));
     }
     DateTime DateTime::UtcNow()
     {
         auto nowTimePoint = std::chrono::system_clock::now();
         auto unixEpochDuration = nowTimePoint.time_since_epoch();
-        int64_t ticks = std::chrono::duration_cast<std::chrono::seconds>(unixEpochDuration).count() * DateTimeConst::TicksPerSecond;
-        return DateTime(((uint64_t)(ticks + DateTimeConst::UnixEpochTicks)) | DateTimeConst::KindUtc);
+        int64_t ticks = std::chrono::duration_cast<std::chrono::seconds>(unixEpochDuration).count() * TicksPerSecond;
+        return DateTime(((uint64_t)(ticks + UnixEpochTicks)) | KindUtc);
     }
 
     DateTime DateTime::Now()
@@ -494,28 +458,28 @@ namespace Nuke::System
 #endif
 
 
-        int64_t tickOffset = secondOffset * DateTimeConst::TicksPerSecond;
+        int64_t tickOffset = secondOffset * TicksPerSecond;
         DateTime utc = UtcNow();
         int64_t tick = utc.Ticks() + tickOffset;
-        if ((uint64_t)tick <= DateTimeConst::MaxTicks)
+        if ((uint64_t)tick <= MaxTicks)
         {
             if (!isAmbiguousLocalDst)
             {
-                return DateTime((uint64_t)tick | DateTimeConst::KindLocal);
+                return DateTime((uint64_t)tick | KindLocal);
             }
-            return DateTime((uint64_t)tick | DateTimeConst::KindLocalAmbiguousDst);
+            return DateTime((uint64_t)tick | KindLocalAmbiguousDst);
         }
-        return DateTime(tick < 0 ? DateTimeConst::KindLocal : DateTimeConst::MaxTicks | DateTimeConst::KindLocal);
+        return DateTime(tick < 0 ? KindLocal : MaxTicks | KindLocal);
 
     }
     DateTimeKind DateTime::Kind() const
     {
         auto internalKind = InternalKind(_dateData);
-        if (internalKind == DateTimeConst::KindUnspecified)
+        if (internalKind == KindUnspecified)
         {
             return DateTimeKind::Unspecified;
         }
-        else if (internalKind == DateTimeConst::KindUtc)
+        else if (internalKind == KindUtc)
         {
             return DateTimeKind::Utc;
         }
@@ -533,7 +497,7 @@ namespace Nuke::System
     DateTime DateTime::AddTicks(int64_t value) const
     {
         uint64_t ticks = (uint64_t)(Ticks() + value);
-        if (ticks > DateTimeConst::MaxTicks)
+        if (ticks > MaxTicks)
         {
             throw std::out_of_range("bigger than max ticks ");
         }
@@ -558,15 +522,15 @@ namespace Nuke::System
         int m = month - 1, d = day - 1;
         if (IsLeapYear(y))
         {
-            n += DateTimeConst::s_daysToMonth366[m];
+            n += DaysToMonth366[m];
         }
         else
         {
             if (d == 28 && m == 1) d--;
-            n += DateTimeConst::s_daysToMonth365[m];
+            n += DaysToMonth365[m];
         }
         n += (uint32_t)d;
-        return DateTime(n * (uint64_t)DateTimeConst::TicksPerDay + UTicks(*this) % DateTimeConst::TicksPerDay | InternalKind(_dateData));
+        return DateTime(n * (uint64_t)TicksPerDay + UTicks(*this) % TicksPerDay | InternalKind(_dateData));
     }
 
     DateTime DateTime::AddMonths(double months) const
@@ -587,7 +551,7 @@ namespace Nuke::System
         {
             throw std::invalid_argument("bad year");
         }
-        auto daysTo = IsLeapYear(y) ? DateTimeConst::s_daysToMonth366 : DateTimeConst::s_daysToMonth365;
+        auto daysTo = IsLeapYear(y) ? DaysToMonth366 : DaysToMonth365;
         uint32_t daysToMonth = daysTo[m - 1];
         int32_t days = (int32_t)(daysTo[m] - daysToMonth);
         if (d > days)
@@ -595,27 +559,27 @@ namespace Nuke::System
             d = days;
         }
         uint32_t n = DaysToYear((uint32_t)y) + daysToMonth + (uint32_t)d - 1;
-        return DateTime(n * (uint64_t)DateTimeConst::TicksPerDay + UTicks(*this) % DateTimeConst::TicksPerDay | InternalKind(_dateData));
+        return DateTime(n * (uint64_t)TicksPerDay + UTicks(*this) % TicksPerDay | InternalKind(_dateData));
     }
 
     DateTime DateTime::AddDays(double value) const
     {
-        return _Add(*this, value, DateTimeConst::MillisPerDay);
+        return _Add(*this, value, MillisPerDay);
     }
 
     DateTime DateTime::AddHours(double value) const
     {
-        return _Add(*this, value, DateTimeConst::MillisPerHour);
+        return _Add(*this, value, MillisPerHour);
     }
 
     DateTime DateTime::AddMinutes(double value) const
     {
-        return _Add(*this, value, DateTimeConst::MillisPerMinute);
+        return _Add(*this, value, MillisPerMinute);
     }
 
     DateTime DateTime::AddSeconds(double value) const
     {
-        return _Add(*this, value, DateTimeConst::MillisPerSecond);
+        return _Add(*this, value, MillisPerSecond);
     }
 
     DateTime DateTime::AddMilliseconds(double value) const
@@ -626,7 +590,7 @@ namespace Nuke::System
     DateTime DateTime::AddTicks(double value) const
     {
         uint64_t ticks = (uint64_t)(Ticks() + value);
-        if (ticks > DateTimeConst::MaxTicks)
+        if (ticks > MaxTicks)
         {
             throw std::out_of_range("bad ticks");
         }
@@ -635,63 +599,75 @@ namespace Nuke::System
 
     int64_t DateTime::Ticks() const
     {
-        return (int64_t)(_dateData & DateTimeConst::TicksMask);
+        return (int64_t)(_dateData & TicksMask);
     }
 
     int32_t DateTime::Year() const
     {
-        return GetDatePart(*this, DateTimeConst::DatePartYear);
+        auto [y100, r1] = Math::DivRem(((uint32_t)(UTicks(*this) / TicksPer6Hours) | 3U), DaysPer400Years);
+        return 1 + (int)(100 * y100 + (r1 | 3) / DaysPer4Years);
     }
 
     int32_t DateTime::Month() const
     {
-        return GetDatePart(*this, DateTimeConst::DatePartMonth);
+        // r1 = (day number within 100-year period) * 4
+        uint32_t r1 = (((uint32_t)(UTicks(*this) / TicksPer6Hours) | 3U) + 1224) % DaysPer400Years;
+        ulong u2 = (ulong)Math::BigMul((int)EafMultiplier, (int)r1 | 3);
+        ushort daySinceMarch1 = (ushort)((uint32_t)u2 / EafDivider);
+        int n3 = 2141 * daySinceMarch1 + 197913;
+        return (ushort)(n3 >> 16) - (daySinceMarch1 >= March1BasedDayOfNewYear ? 12 : 0);
     }
 
     int32_t DateTime::Day() const
     {
-        return GetDatePart(*this, DateTimeConst::DatePartDay);
+        // r1 = (day number within 100-year period) * 4
+        uint32_t r1 = (((uint32_t)(UTicks(*this) / TicksPer6Hours) | 3U) + 1224) % DaysPer400Years;
+        ulong u2 = (ulong)Math::BigMul((int)EafMultiplier, (int)r1 | 3);
+        ushort daySinceMarch1 = (ushort)((uint32_t)u2 / EafDivider);
+        int n3 = 2141 * daySinceMarch1 + 197913;
+        // Return 1-based day-of-month
+        return (ushort)n3 / 2141 + 1;
     }
 
     int32_t DateTime::Hour() const
     {
-        return (int32_t)((uint32_t)(UTicks(*this) / DateTimeConst::TicksPerHour) % 24);
+        return (int32_t)((uint32_t)(UTicks(*this) / TicksPerHour) % 24);
     }
 
     int32_t DateTime::Minute() const
     {
-        return (int32_t)((UTicks(*this) / DateTimeConst::TicksPerMinute) % 60);
+        return (int32_t)((UTicks(*this) / TicksPerMinute) % 60);
     }
 
     int32_t DateTime::Second() const
     {
-        return (int32_t)((UTicks(*this) / DateTimeConst::TicksPerSecond) % 60);
+        return (int32_t)((UTicks(*this) / TicksPerSecond) % 60);
     }
 
     int32_t DateTime::Millisecond() const
     {
-        return (int32_t)((UTicks(*this) / DateTimeConst::TicksPerMillisecond) % 1000);
+        return (int32_t)((UTicks(*this) / TicksPerMillisecond) % 1000);
     }
 
     DateTime DateTime::Date() const
     {
         uint64_t uticks = UTicks(*this);
-        return DateTime((uticks - uticks % DateTimeConst::TicksPerDay) | InternalKind(_dateData));
+        return DateTime((uticks - uticks % TicksPerDay) | InternalKind(_dateData));
     }
 
     DayOfWeek DateTime::DayOfWeek() const
     {
-        return static_cast<Nuke::System::DayOfWeek>((((uint32_t)(UTicks(*this) / DateTimeConst::TicksPerDay) + 1) % 7));
+        return static_cast<Nuke::System::DayOfWeek>((((uint32_t)(UTicks(*this) / TicksPerDay) + 1) % 7));
     }
 
     int32_t DateTime::DayOfYear() const
     {
-        return GetDatePart(*this, DateTimeConst::DatePartDayOfYear);
+        return 1 + (int32_t)(((((uint32_t)(UTicks(*this) / TicksPer6Hours) | 3U) % (uint32_t)DaysPer400Years) | 3U) * EafMultiplier / EafDivider);
     }
 
     TimeSpan DateTime::TimeOfDay() const
     {
-        return TimeSpan((int64_t)(UTicks(*this) % DateTimeConst::TicksPerDay));
+        return TimeSpan((int64_t)(UTicks(*this) % TicksPerDay));
     }
 
     TimeSpan DateTime::Subtract(DateTime value)
@@ -702,7 +678,7 @@ namespace Nuke::System
     DateTime DateTime::Subtract(TimeSpan value)
     {
         uint64_t ticks = (uint64_t)(Ticks() - value._ticks);
-        if (ticks > DateTimeConst::MaxTicks)
+        if (ticks > MaxTicks)
         {
             throw std::out_of_range("bad ticks");
         }
