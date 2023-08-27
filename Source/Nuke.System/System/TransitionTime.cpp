@@ -58,6 +58,10 @@ namespace Nuke::System
         }
     }
 
+    TransitionTime::TransitionTime()
+    {
+
+    }
     TransitionTime::TransitionTime(DateTime timeOfDay, int32_t month, int32_t week, int32_t day, System::DayOfWeek dayOfWeek, bool isFixedDateRule)
     {
         internals = new TransitionTimeInternals();

@@ -47,34 +47,41 @@ namespace Nuke::System
         delete internals;
     }
 
-    TimeSpan AdjustmentRule::BaseUtcOffsetDelta()
+    TimeSpan AdjustmentRule::BaseUtcOffsetDelta() const
     {
         return internals->_baseUtcOffsetDelta;
     }
 
-    DateTime AdjustmentRule::DateEnd()
+    DateTime AdjustmentRule::DateEnd() const
     {
         return internals->_dateEnd;
     }
 
-    DateTime AdjustmentRule::DateStart()
+    DateTime AdjustmentRule::DateStart() const
     {
         return internals->_dateStart;
     }
 
-    TimeSpan AdjustmentRule::DaylightDelta()
+    TimeSpan AdjustmentRule::DaylightDelta() const
     {
         return internals->_daylightDelta;
     }
 
-    TransitionTime AdjustmentRule::DaylightTransitionEnd()
+    TransitionTime AdjustmentRule::DaylightTransitionEnd() const
     {
         return internals->_daylightTransitionEnd;
     }
 
-    TransitionTime AdjustmentRule::DaylightTransitionStart()
+    TransitionTime AdjustmentRule::DaylightTransitionStart() const
     {
         return internals->_daylightTransitionStart;
+    }
+
+    bool AdjustmentRule::HasDaylightSaving() const
+    {
+        return DaylightDelta() != TimeSpan::Zero ||
+            (DaylightTransitionStart() != {} && DaylightTransitionStart().TimeOfDay() != DateTime.MinValue) ||
+            (DaylightTransitionEnd() != {}&& DaylightTransitionEnd().TimeOfDay() != DateTime.MinValue.AddMilliseconds(1));
     }
 
     static void AdjustDaylightDeltaToExpectedRange(TimeSpan& daylightDelta, TimeSpan& baseUtcOffsetDelta)
@@ -147,7 +154,7 @@ namespace Nuke::System
             noDaylightTransitions);
     }
 
-    bool AdjustmentRule::Equals(const AdjustmentRule& other)
+    bool AdjustmentRule::Equals(const AdjustmentRule& other) const
     {
         return internals->_dateStart == other.internals->_dateStart &&
             internals->_dateEnd == other.internals->_dateEnd &&

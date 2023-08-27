@@ -12,16 +12,17 @@ namespace Nuke::System
     class AdjustmentRule
     {
     public:
-        TimeSpan BaseUtcOffsetDelta();
-        DateTime DateEnd();
-        DateTime DateStart();
-        TimeSpan DaylightDelta();
-        TransitionTime DaylightTransitionEnd();
-        TransitionTime DaylightTransitionStart();
+        TimeSpan BaseUtcOffsetDelta() const;
+        DateTime DateEnd() const;
+        DateTime DateStart() const;
+        TimeSpan DaylightDelta() const;
+        TransitionTime DaylightTransitionEnd() const;
+        TransitionTime DaylightTransitionStart() const;
+        bool HasDaylightSaving() const;
         static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd);
         static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta);
         static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta, bool noDaylightTransitions);
-        bool Equals(const AdjustmentRule& other);
+        bool Equals(const AdjustmentRule& other) const;
 
     private:
         AdjustmentRule(

@@ -32,7 +32,7 @@ namespace Nuke::System
     
     static TimeSpan GetUtcOffset(const TimeSpan& baseUtcOffset, const AdjustmentRule& adjustmentRule)
     {
-        return baseUtcOffset + adjustmentRule.BaseUtcOffsetDelta + (adjustmentRule.HasDaylightSaving ? adjustmentRule.DaylightDelta : TimeSpan.Zero);
+        return baseUtcOffset + adjustmentRule.BaseUtcOffsetDelta() + (adjustmentRule.HasDaylightSaving() ? adjustmentRule.DaylightDelta() : TimeSpan::Zero);
     }
 
     static bool IsValidAdjustmentRuleOffset(const TimeSpan& baseUtcOffset, const AdjustmentRule& adjustmentRule)

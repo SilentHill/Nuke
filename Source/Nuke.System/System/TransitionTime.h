@@ -23,6 +23,8 @@ namespace Nuke::System
 
     private:
         friend class AdjustmentRule;
+        friend class TimeZoneInfo;
+        TransitionTime();
         TransitionTime(DateTime timeOfDay, int32_t month, int32_t week, int32_t day, System::DayOfWeek dayOfWeek, bool isFixedDateRule);
         ~TransitionTime();
         TransitionTime(const TransitionTime& trainsitionTime) = default;
