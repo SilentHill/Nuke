@@ -40,7 +40,7 @@ namespace Nuke::System
         TimeSpan utcOffset = GetUtcOffset(baseUtcOffset, adjustmentRule);
         return !UtcOffsetOutOfRange(utcOffset);
     }
-    static void ValidateTimeZoneInfo(std::string id, TimeSpan baseUtcOffset, std::vector<AdjustmentRule> adjustmentRules, bool& adjustmentRulesSupportDst)
+    static void ValidateTimeZoneInfo(const std::string& id, TimeSpan baseUtcOffset, const std::vector<AdjustmentRule>& adjustmentRules, bool& adjustmentRulesSupportDst)
     {
         if (id.empty())
         {
@@ -62,26 +62,25 @@ namespace Nuke::System
         if (!adjustmentRules.empty())
         {
             adjustmentRulesSupportDst = true;
-            AdjustmentRule current;
+            AdjustmentRule* current;
             for (int i = 0; i < adjustmentRules.size(); i++)
             {
-                AdjustmentRule prev = current;
-                current = adjustmentRules[i];
+                AdjustmentRule* prev = current;
+                current = const_cast<AdjustmentRule*>(& adjustmentRules[i]);
 
-                // if (current == null)
-                // {
-                //     throw new InvalidTimeZoneException(SR.Argument_AdjustmentRulesNoNulls);
-                // }
-
-                if (!IsValidAdjustmentRuleOffset(baseUtcOffset, current))
+                if (current == nullptr)
                 {
-                    throw new InvalidTimeZoneException(SR.ArgumentOutOfRange_UtcOffsetAndDaylightDelta);
+                    throw std::out_of_range("timezone");
                 }
 
-                if (prev != null && current.DateStart <= prev.DateEnd)
+                if (!IsValidAdjustmentRuleOffset(baseUtcOffset, *current))
                 {
-                    // verify the rules are in chronological order and the DateStart/DateEnd do not overlap
-                    throw new InvalidTimeZoneException(SR.Argument_AdjustmentRulesOutOfOrder);
+                    throw std::out_of_range("baseUtcOffset");
+                }
+
+                if (prev != nullptr && current->DateStart() <= prev->DateEnd())
+                {
+                    throw std::out_of_range("timezone");
                 }
             }
         }

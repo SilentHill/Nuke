@@ -80,8 +80,8 @@ namespace Nuke::System
     bool AdjustmentRule::HasDaylightSaving() const
     {
         return DaylightDelta() != TimeSpan::Zero ||
-            (DaylightTransitionStart() != {} && DaylightTransitionStart().TimeOfDay() != DateTime.MinValue) ||
-            (DaylightTransitionEnd() != {}&& DaylightTransitionEnd().TimeOfDay() != DateTime.MinValue.AddMilliseconds(1));
+            (DaylightTransitionStart().TimeOfDay() != DateTime::MinValue) ||
+            (DaylightTransitionEnd().TimeOfDay() != DateTime::MinValue.AddMilliseconds(1));
     }
 
     static void AdjustDaylightDeltaToExpectedRange(TimeSpan& daylightDelta, TimeSpan& baseUtcOffsetDelta)
