@@ -60,12 +60,12 @@ namespace Nuke::System
 
     public: // 赋值比较操作符
         DateTime& operator=(const DateTime& dateTime);
-        bool operator==(const DateTime& dateTime);
-        bool operator!=(const DateTime& dateTime);
-        bool operator<(const DateTime& dateTime);
-        bool operator<=(const DateTime& dateTime);
-        bool operator>(const DateTime& dateTime);
-        bool operator>=(const DateTime& dateTime);
+        bool operator==(const DateTime& dateTime) const;
+        bool operator!=(const DateTime& dateTime) const;
+        bool operator<(const DateTime& dateTime) const;
+        bool operator<=(const DateTime& dateTime) const;
+        bool operator>(const DateTime& dateTime) const;
+        bool operator>=(const DateTime& dateTime) const;
         
     public:
         /*

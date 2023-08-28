@@ -388,31 +388,31 @@ namespace Nuke::System
         return *this;
     }
 
-    bool DateTime::operator==(const DateTime& dateTime)
+    bool DateTime::operator==(const DateTime& dateTime) const
     {
         return ((_dateData ^ dateTime._dateData) << 2) == 0;
     }
 
-    bool DateTime::operator!=(const DateTime& dateTime)
+    bool DateTime::operator!=(const DateTime& dateTime) const
     {
         return !(*this == dateTime);
     }
-    bool DateTime::operator<(const DateTime& dateTime)
+    bool DateTime::operator<(const DateTime& dateTime) const
     {
         return Ticks() < dateTime.Ticks();
     }
 
-    bool DateTime::operator<=(const DateTime& dateTime)
+    bool DateTime::operator<=(const DateTime& dateTime) const
     {
         return Ticks() <= dateTime.Ticks();
     }
 
-    bool DateTime::operator>(const DateTime& dateTime)
+    bool DateTime::operator>(const DateTime& dateTime) const
     {
         return Ticks() > dateTime.Ticks();
     }
 
-    bool DateTime::operator>=(const DateTime& dateTime)
+    bool DateTime::operator>=(const DateTime& dateTime) const
     {
         return Ticks() >= dateTime.Ticks();
     }
