@@ -163,5 +163,4 @@ namespace Nuke::System
             internals->_daylightTransitionEnd.Equals(other.internals->_daylightTransitionEnd) &&
             internals->_daylightTransitionStart.Equals(other.internals->_daylightTransitionStart);
     }
-
 }

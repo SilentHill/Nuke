@@ -59,8 +59,14 @@ namespace Nuke::System
         bool IsInvalidTime(DateTime dateTime);
         std::string ToSerializedString();
         std::string ToString();
+        ~TimeZoneInfo();
     private:
         TimeZoneInfo();
+        TimeZoneInfo(const TimeZoneInfo& timeZoneInfo);
+        //TimeZoneInfo(TimeZoneInfo&&) = delete;
+        //~TimeZoneInfo();
+
+        friend class TimeZoneInfoInternals;
         class TimeZoneInfoInternals;
         TimeZoneInfoInternals* internals;
     };
