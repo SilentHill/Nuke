@@ -342,32 +342,32 @@ namespace Nuke::System
         return _ticks / (double)t2.Ticks();
     }
 
-    bool TimeSpan::operator ==(const TimeSpan& t2)
+    bool TimeSpan::operator ==(const TimeSpan& t2) const
     {
         return _ticks == t2._ticks;
     }
 
-    bool TimeSpan::operator !=(const TimeSpan& t2)
+    bool TimeSpan::operator !=(const TimeSpan& t2) const
     {
         return _ticks != t2._ticks;
     }
 
-    bool TimeSpan::operator <(const TimeSpan& t2)
+    bool TimeSpan::operator <(const TimeSpan& t2) const
     {
         return _ticks < t2._ticks;
     }
 
-    bool TimeSpan::operator <=(const TimeSpan& t2)
+    bool TimeSpan::operator <=(const TimeSpan& t2) const
     {
         return _ticks <= t2._ticks;
     }
 
-    bool TimeSpan::operator >(const TimeSpan& t2)
+    bool TimeSpan::operator >(const TimeSpan& t2) const
     {
         return _ticks > t2._ticks;
     }
 
-    bool TimeSpan::operator >=(const TimeSpan& t2)
+    bool TimeSpan::operator >=(const TimeSpan& t2) const
     {
         return _ticks >= t2._ticks;
     }

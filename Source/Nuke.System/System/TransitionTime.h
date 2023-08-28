@@ -12,7 +12,7 @@ namespace Nuke::System
     {
     public:
         int Day() const;
-        DayOfWeek DayOfWeek() const;
+        System::DayOfWeek DayOfWeek() const;
         bool IsFixedDateRule() const;
         int Month() const;
         DateTime TimeOfDay() const;

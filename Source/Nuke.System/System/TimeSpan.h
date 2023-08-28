@@ -62,7 +62,7 @@ namespace Nuke::System
         TimeSpan operator +(const TimeSpan& t2);
         TimeSpan operator *(double factor);
         TimeSpan operator /(double divisor);
-        double operator /(const TimeSpan& t2) const;
+        double operator /(const TimeSpan& t2);
         bool operator ==(const TimeSpan& t2) const;
         bool operator !=(const TimeSpan& t2) const;
         bool operator <(const TimeSpan& t2) const;
