@@ -4,6 +4,7 @@
 #include <_pch.h>
 
 // 设施
+
 #include <System/Event.h>
 #include <System/String.h>
 #include <System/Math.h>
@@ -11,6 +12,8 @@
 #include <System/TimeSpan.h>
 #include <System/DateTime.h>
 #include <System/Generate.h>
+#include <System/Convert.h>
+
 
 // 诊断
 #include <System/Diagnostics/Metrics/Meter.h>
