@@ -36,29 +36,29 @@ namespace Nuke::System
         static DateTime ConvertTimeFromUtc(DateTime dateTime, TimeZoneInfo destinationTimeZone);
         static DateTime ConvertTimeToUtc(DateTime dateTime);
         static DateTime ConvertTimeToUtc(DateTime dateTime, TimeZoneInfo sourceTimeZone);
-        static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName);
-        static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName, std::string daylightDisplayName, const std::vector<AdjustmentRule>& adjustmentRules, bool disableDaylightSavingTime);
-        static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName, std::string daylightDisplayName, const std::vector<AdjustmentRule>& adjustmentRules);
+        // static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName);
+        // static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName, std::string daylightDisplayName, const std::vector<AdjustmentRule>& adjustmentRules, bool disableDaylightSavingTime);
+        // static TimeZoneInfo CreateCustomTimeZone(std::string id, TimeSpan baseUtcOffset, std::string displayName, std::string standardDisplayName, std::string daylightDisplayName, const std::vector<AdjustmentRule>& adjustmentRules);
         
-        static TimeZoneInfo FromSerializedString(std::string source);
-        static bool TryConvertIanaIdToWindowsId(std::string ianaId, std::string& windowsId);
-        static bool TryConvertWindowsIdToIanaId(std::string windowsId, std::string& ianaId);
-        static bool TryConvertWindowsIdToIanaId(std::string windowsId, std::string region, std::string& ianaId);
+        //static TimeZoneInfo FromSerializedString(std::string source);
+        //static bool TryConvertIanaIdToWindowsId(std::string ianaId, std::string& windowsId);
+        //static bool TryConvertWindowsIdToIanaId(std::string windowsId, std::string& ianaId);
+        //static bool TryConvertWindowsIdToIanaId(std::string windowsId, std::string region, std::string& ianaId);
         bool Equals(const TimeZoneInfo& other);
         std::vector<AdjustmentRule> GetAdjustmentRules();
         //TimeSpan[] GetAmbiguousTimeOffsets(DateTimeOffset dateTimeOffset);
-        std::vector<TimeSpan> GetAmbiguousTimeOffsets(DateTime dateTime);
+        //std::vector<TimeSpan> GetAmbiguousTimeOffsets(DateTime dateTime);
         
         TimeSpan GetUtcOffset(DateTime dateTime);
         //TimeSpan GetUtcOffset(DateTimeOffset dateTimeOffset);
         bool HasSameRules(const TimeZoneInfo& other);
         //bool IsAmbiguousTime(DateTimeOffset dateTimeOffset);
-        bool IsAmbiguousTime(DateTime dateTime);
+        //bool IsAmbiguousTime(DateTime dateTime);
         //bool IsDaylightSavingTime(DateTimeOffset dateTimeOffset);
         bool IsDaylightSavingTime(DateTime dateTime);
         bool IsInvalidTime(DateTime dateTime);
-        std::string ToSerializedString();
-        std::string ToString();
+        //std::string ToSerializedString();
+        //std::string ToString();
         ~TimeZoneInfo();
     private:
         TimeZoneInfo();
