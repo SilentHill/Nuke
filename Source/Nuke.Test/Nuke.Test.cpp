@@ -13,7 +13,10 @@ int main(int argc, char** argv)
 {
 
     using namespace Nuke::System;
+    std::future<int> fi;
 
+
+    auto tzdbString = Nuke::CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
     auto es = Convert::ToBase64String("HelloWorld", 0, 10);
 
 

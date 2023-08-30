@@ -1,6 +1,6 @@
 ﻿
 
-#include <bits/stdc++.h>
+#include <_pch.h>
 #include "TimeZoneApi.h"
 
 #ifdef __linux__
@@ -41,6 +41,12 @@ namespace Nuke::CrossPlatform::TimeZoneApi
         }
 
         return tzDirectory;
+    }
+
+    const std::string& GetTimeZoneDataBaseJsonString()
+    {
+        #include "TimeZoneDataBase.h"
+        return tzdbJson;
     }
 
     std::vector<std::string> ParseTimeZoneIds(std::istream& reader)

@@ -114,14 +114,16 @@ namespace Nuke::System::Threading::Tasks
         RunAsync(TimeSpan timeoutSpan, FuncType&& func, ArgTypes&&... args)
         {
             using _ReturnType = std::invoke_result_t<std::decay_t<FuncType>, std::decay_t<ArgTypes>...>;
-            auto future = std::async(std::forward<FuncType>(func), std::forward<ArgTypes>(args)...);
+            auto future = std::async(std::launch::async, std::forward<FuncType>(func), std::forward<ArgTypes>(args)...);
             auto sharedFuture = future.share();
             Task<_ReturnType> task;
             task._future = sharedFuture;
+            
             return task;
         }
+
         template <typename Func, typename... Args>
-        static auto RunAsyncWithException(Func&& func, Args&&... args) -> Task<PackResult<decltype(func(args...))>>
+        static auto RunAsyncWithExceptionCapture(Func&& func, Args&&... args) -> Task<PackResult<decltype(func(args...))>>
         {
             // 返回值包装类型
             using PackResultType = PackResult<decltype(func(args...))>;
@@ -167,7 +169,7 @@ namespace Nuke::System::Threading::Tasks
     // 同步函数转异步
     Task<PackResult<int>> GetDataAsync()
     {
-        auto task = TaskFactory::RunAsyncWithException(
+        auto task = TaskFactory::RunAsyncWithExceptionCapture(
             []()
             {
                 return GetData1();

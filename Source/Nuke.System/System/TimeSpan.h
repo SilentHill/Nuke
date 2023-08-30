@@ -44,31 +44,31 @@ namespace Nuke::System
         static TimeSpan Zero;
 
     public: // 比较与哈希
-        static bool Equals(const TimeSpan& t1, const TimeSpan& t2);
-        bool Equals(const TimeSpan& timeSpan) const;
+        static bool Equals(TimeSpan t1, TimeSpan t2);
+        bool Equals(TimeSpan timeSpan) const;
         int32_t GetHashCode() const;
 
     public: // 加减乘除
-        TimeSpan Add(const TimeSpan& ts);
-        TimeSpan Subtract(const TimeSpan& ts);
-        TimeSpan Multiply(double factor);
-        TimeSpan Divide(double divisor);
-        double Divide(const TimeSpan& ts);
+        TimeSpan Add(TimeSpan ts) const;
+        TimeSpan Subtract(TimeSpan ts) const;
+        TimeSpan Multiply(double factor) const;
+        TimeSpan Divide(double divisor) const;
+        double Divide(TimeSpan ts) const;
         
     public: // 加减乘除重载
-        TimeSpan operator -();
-        TimeSpan operator -(const TimeSpan& t2);
-        TimeSpan operator +();
-        TimeSpan operator +(const TimeSpan& t2);
-        TimeSpan operator *(double factor);
-        TimeSpan operator /(double divisor);
-        double operator /(const TimeSpan& t2);
-        bool operator ==(const TimeSpan& t2) const;
-        bool operator !=(const TimeSpan& t2) const;
-        bool operator <(const TimeSpan& t2) const;
-        bool operator <=(const TimeSpan& t2) const;
-        bool operator >(const TimeSpan& t2) const;
-        bool operator >=(const TimeSpan& t2) const;
+        TimeSpan operator -() const;
+        TimeSpan operator -(TimeSpan t2) const;
+        TimeSpan operator +() const;
+        TimeSpan operator +(TimeSpan t2) const;
+        TimeSpan operator *(double factor) const;
+        TimeSpan operator /(double divisor) const;
+        double operator /(TimeSpan t2) const;
+        bool operator ==(TimeSpan t2) const;
+        bool operator !=(TimeSpan t2) const;
+        bool operator <(TimeSpan t2) const;
+        bool operator <=(TimeSpan t2) const;
+        bool operator >(TimeSpan t2) const;
+        bool operator >=(TimeSpan t2) const;
 
     public: // 属性方法
         int64_t Ticks() const;

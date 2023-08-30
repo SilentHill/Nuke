@@ -121,8 +121,8 @@ namespace Nuke::System
         enum DayOfWeek DayOfWeek() const;	// 星期几
         int32_t DayOfYear() const;		// 该年中的第几天
         TimeSpan TimeOfDay() const;		// 当天已经过的时间段
-        TimeSpan Subtract(DateTime value);	// 返回一个新的 TimeSpan，从此实例的值中减去指定的日期和时间。
-        DateTime Subtract(TimeSpan value);	// 返回一个新的 DateTime，从此实例的值中减去指定持续时间。
+        TimeSpan Subtract(DateTime value) const;	// 返回一个新的 TimeSpan，从此实例的值中减去指定的日期和时间。
+        DateTime Subtract(TimeSpan value) const;	// 返回一个新的 DateTime，从此实例的值中减去指定持续时间。
 
     public: // 属性方法
         DateTimeKind Kind() const;
@@ -139,7 +139,7 @@ namespace Nuke::System
         DateTime AddTicks(double value) const;
         DateTime AddTicks(int64_t value) const;
 
-        DateTime ToLocalTime();
+        DateTime ToLocalTime() const;
 
         std::string ToString() const; // yyyy-MM-dd HH:mm::ss
 

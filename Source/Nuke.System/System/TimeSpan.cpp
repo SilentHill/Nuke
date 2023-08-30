@@ -5,7 +5,7 @@
 
 namespace Nuke::System
 {
-    static_assert(sizeof(TimeSpan) == sizeof(int64_t), "[Nuke编译期异常] 禁止TimeSpan大小超过64位");
+    static_assert(sizeof(TimeSpan) == sizeof(int64_t), "[编译期异常] TimeSpan大小禁止超过64bit");
 
     const int64_t TicksPerMillisecond = 10000;
     const int64_t TicksPerSecond = TicksPerMillisecond * 1000;   // 10,000,000
@@ -107,12 +107,12 @@ namespace Nuke::System
         _ticks = (int64_t)totalMilliSeconds * TicksPerMillisecond;
     }
 
-    bool TimeSpan::Equals(const TimeSpan& t1, const TimeSpan& t2)
+    bool TimeSpan::Equals(TimeSpan t1, TimeSpan t2)
     {
         return t1.Ticks() == t2.Ticks();
     }
 
-    bool TimeSpan::Equals(const TimeSpan& timeSpan) const
+    bool TimeSpan::Equals(TimeSpan timeSpan) const
     {
         return Equals(*this, timeSpan);
     }
@@ -206,7 +206,7 @@ namespace Nuke::System
         return buffer;
     }
 
-    TimeSpan TimeSpan::Add(const TimeSpan& ts)
+    TimeSpan TimeSpan::Add(TimeSpan ts) const
     {
         int64_t result = _ticks + ts._ticks;
         if ((_ticks >> 63 == ts._ticks >> 63)
@@ -268,7 +268,7 @@ namespace Nuke::System
     {
         return TimeSpan(value);
     }
-    TimeSpan TimeSpan::Subtract(const TimeSpan& ts)
+    TimeSpan TimeSpan::Subtract(TimeSpan ts) const
     {
         int64_t result = _ticks - ts._ticks;
         if ((_ticks >> 63 != ts._ticks >> 63) && (_ticks >> 63 != result >> 63))
@@ -278,22 +278,22 @@ namespace Nuke::System
         return TimeSpan(result);
     }
 
-    TimeSpan TimeSpan::Multiply(double factor)
+    TimeSpan TimeSpan::Multiply(double factor) const
     {
         return *this * factor;
     }
 
-    TimeSpan TimeSpan::Divide(double divisor)
+    TimeSpan TimeSpan::Divide(double divisor) const
     {
         return *this / divisor;
     }
 
-    double TimeSpan::Divide(const TimeSpan& ts)
+    double TimeSpan::Divide(TimeSpan ts) const
     {
         return *this / ts;
     }
 
-    TimeSpan TimeSpan::operator -()
+    TimeSpan TimeSpan::operator -() const
     {
         if (_ticks == MinValue._ticks)
         {
@@ -302,22 +302,22 @@ namespace Nuke::System
         return TimeSpan(-_ticks);
     }
 
-    TimeSpan TimeSpan::operator -(const TimeSpan& t2)
+    TimeSpan TimeSpan::operator -(TimeSpan t2) const
     {
         return this->Subtract(t2);
     }
 
-    TimeSpan TimeSpan::operator +()
+    TimeSpan TimeSpan::operator +() const
     {
         return *this;
     }
 
-    TimeSpan TimeSpan::operator +(const TimeSpan& t2)
+    TimeSpan TimeSpan::operator +(TimeSpan t2) const
     {
         return this->Add(t2);
     }
 
-    TimeSpan TimeSpan::operator *(double factor)
+    TimeSpan TimeSpan::operator *(double factor) const
     {
         if (std::isnan(factor))
         {
@@ -328,7 +328,7 @@ namespace Nuke::System
         return IntervalFromDoubleTicks(ticks);
     }
 
-    TimeSpan TimeSpan::operator /(double divisor)
+    TimeSpan TimeSpan::operator /(double divisor) const
     {
         if (std::isnan(divisor))
         {
@@ -337,37 +337,37 @@ namespace Nuke::System
         double ticks = Math::Round(_ticks / divisor);
         return IntervalFromDoubleTicks(ticks);
     }
-    double TimeSpan::operator /(const TimeSpan& t2)
+    double TimeSpan::operator /(TimeSpan t2) const
     {
         return _ticks / (double)t2.Ticks();
     }
 
-    bool TimeSpan::operator ==(const TimeSpan& t2) const
+    bool TimeSpan::operator ==(TimeSpan t2) const
     {
         return _ticks == t2._ticks;
     }
 
-    bool TimeSpan::operator !=(const TimeSpan& t2) const
+    bool TimeSpan::operator !=(TimeSpan t2) const
     {
         return _ticks != t2._ticks;
     }
 
-    bool TimeSpan::operator <(const TimeSpan& t2) const
+    bool TimeSpan::operator <(TimeSpan t2) const
     {
         return _ticks < t2._ticks;
     }
 
-    bool TimeSpan::operator <=(const TimeSpan& t2) const
+    bool TimeSpan::operator <=(TimeSpan t2) const
     {
         return _ticks <= t2._ticks;
     }
 
-    bool TimeSpan::operator >(const TimeSpan& t2) const
+    bool TimeSpan::operator >(TimeSpan t2) const
     {
         return _ticks > t2._ticks;
     }
 
-    bool TimeSpan::operator >=(const TimeSpan& t2) const
+    bool TimeSpan::operator >=(TimeSpan t2) const
     {
         return _ticks >= t2._ticks;
     }

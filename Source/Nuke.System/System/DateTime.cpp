@@ -284,7 +284,7 @@ namespace Nuke::System
         }
     }
 
-    DateTime DateTime::ToLocalTime()
+    DateTime DateTime::ToLocalTime() const
     {
         throw std::runtime_error("no implemented");
         //if ((_dateData & KindLocal) != 0)
@@ -671,12 +671,12 @@ namespace Nuke::System
         return TimeSpan((int64_t)(UTicks(*this) % TicksPerDay));
     }
 
-    TimeSpan DateTime::Subtract(DateTime value)
+    TimeSpan DateTime::Subtract(DateTime value) const
     {
         return TimeSpan(Ticks() - value.Ticks());
     }
 
-    DateTime DateTime::Subtract(TimeSpan value)
+    DateTime DateTime::Subtract(TimeSpan value) const
     {
         uint64_t ticks = (uint64_t)(Ticks() - value._ticks);
         if (ticks > MaxTicks)
