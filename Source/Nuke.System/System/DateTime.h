@@ -59,13 +59,13 @@ namespace Nuke::System
         static DateTime FromFileTimeUtc(int64_t fileTime);
 
     public: // 赋值比较操作符
-        DateTime& operator=(const DateTime& dateTime);
-        bool operator==(const DateTime& dateTime) const;
-        bool operator!=(const DateTime& dateTime) const;
-        bool operator<(const DateTime& dateTime) const;
-        bool operator<=(const DateTime& dateTime) const;
-        bool operator>(const DateTime& dateTime) const;
-        bool operator>=(const DateTime& dateTime) const;
+        DateTime& operator=(DateTime dateTime);
+        bool operator==(DateTime dateTime) const;
+        bool operator!=(DateTime dateTime) const;
+        bool operator<(DateTime dateTime) const;
+        bool operator<=(DateTime dateTime) const;
+        bool operator>(DateTime dateTime) const;
+        bool operator>=(DateTime dateTime) const;
         
     public:
         /*

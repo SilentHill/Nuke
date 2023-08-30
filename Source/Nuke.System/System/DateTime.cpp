@@ -246,7 +246,7 @@ namespace Nuke::System
 
 
     // 纯私函数
-    DateTime _Add(const DateTime& dateTime, double value, int32_t scale)
+    DateTime _Add(DateTime dateTime, double value, int32_t scale)
     {
         double millis_double = value * scale + (value >= 0 ? 0.5 : -0.5);
         if (millis_double <= -MaxMillis || millis_double >= MaxMillis)
@@ -257,12 +257,12 @@ namespace Nuke::System
 
     }
 
-    uint64_t UTicks(const DateTime& dateTime)
+    uint64_t UTicks(DateTime dateTime)
     {
         return static_cast<uint64_t>(dateTime.Ticks());
     }
 
-    void GetDate(const DateTime& dateTime, int32_t& year, int32_t& month, int32_t& day)
+    void GetDate(DateTime dateTime, int32_t& year, int32_t& month, int32_t& day)
     {
         // y100 = number of whole 100-year periods since 3/1/0000
             // r1 = (day number within 100-year period) * 4
@@ -382,37 +382,37 @@ namespace Nuke::System
         return DateTime(universalTicks | KindUtc);
     }
 
-    DateTime& DateTime::operator=(const DateTime& dateTime)
+    DateTime& DateTime::operator=(DateTime dateTime)
     {
         _dateData = dateTime._dateData;
         return *this;
     }
 
-    bool DateTime::operator==(const DateTime& dateTime) const
+    bool DateTime::operator==(DateTime dateTime) const
     {
         return ((_dateData ^ dateTime._dateData) << 2) == 0;
     }
 
-    bool DateTime::operator!=(const DateTime& dateTime) const
+    bool DateTime::operator!=(DateTime dateTime) const
     {
         return !(*this == dateTime);
     }
-    bool DateTime::operator<(const DateTime& dateTime) const
+    bool DateTime::operator<(DateTime dateTime) const
     {
         return Ticks() < dateTime.Ticks();
     }
 
-    bool DateTime::operator<=(const DateTime& dateTime) const
+    bool DateTime::operator<=(DateTime dateTime) const
     {
         return Ticks() <= dateTime.Ticks();
     }
 
-    bool DateTime::operator>(const DateTime& dateTime) const
+    bool DateTime::operator>(DateTime dateTime) const
     {
         return Ticks() > dateTime.Ticks();
     }
 
-    bool DateTime::operator>=(const DateTime& dateTime) const
+    bool DateTime::operator>=(DateTime dateTime) const
     {
         return Ticks() >= dateTime.Ticks();
     }

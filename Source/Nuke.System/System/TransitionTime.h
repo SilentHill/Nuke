@@ -31,7 +31,7 @@ namespace Nuke::System
         TransitionTime(TransitionTime&& trainsitionTime) = default;
         class TransitionTimeInternals;
         TransitionTimeInternals* internals;
-    };
+    }; 
 
     static bool operator ==(TransitionTime t1, TransitionTime t2);
     static bool operator !=(TransitionTime t1, TransitionTime t2);
