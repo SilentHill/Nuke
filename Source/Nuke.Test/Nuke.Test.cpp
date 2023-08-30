@@ -14,7 +14,10 @@ int main(int argc, char** argv)
 
     using namespace Nuke::System;
 
-    auto dv = Convert::FromBase64String("SGVsbG9Xb3JsZA==");
+    auto es = Convert::ToBase64String("HelloWorld", 0, 10);
+
+
+    auto dv = Convert::FromBase64String(es);
     auto timeZoneIds = Nuke::CrossPlatform::TimeZoneApi::GetTimeZoneIds();
 
     ::testing::InitGoogleTest(&argc, argv);

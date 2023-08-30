@@ -9,5 +9,6 @@ namespace Nuke::System
     {
     public:
         static std::vector<char> FromBase64String(const std::string& s);
+        static std::string ToBase64String(const char* inArray, int32_t offset, int32_t length);
     };
 }

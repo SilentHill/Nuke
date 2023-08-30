@@ -1,4 +1,5 @@
-﻿
+﻿#include "Convert.h"
+
 #include "_pch.h"
 #include "Convert.h"
 
@@ -134,5 +135,13 @@ namespace Nuke::System
         std::vector<char> dv(d_size);
         decode(dv.data(), s.c_str(), s.size());
         return dv;
+    }
+    std::string Convert::ToBase64String(const char* inArray, int32_t offset, int32_t length)
+    {
+        auto e_size = encoded_size(length);
+        std::string es;
+        es.resize(e_size);
+        encode(es.data(), inArray, es.size());
+        return es;
     }
 }
