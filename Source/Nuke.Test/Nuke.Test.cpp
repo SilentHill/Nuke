@@ -9,11 +9,37 @@
 
 #include <CrossPlatform/TimeZoneApi.h>
 
+using namespace Nuke::System;
+using namespace Nuke::System::Threading::Tasks;
+
+
+Task<std::string> StartBatchJobAsync()
+{
+    auto task1 = TaskFactory::RunAsync([]()
+    {
+        return;
+    });
+    task1.Await();
+
+    auto task2 = TaskFactory::RunAsync([]()
+    {
+        return 1;
+    });
+    auto value2 = task2.Await();
+
+    auto task3 = TaskFactory::RunAsync([&]()
+    {
+        return std::to_string(value2);
+    });
+
+
+    return task3;
+};
+
+
 int main(int argc, char** argv)
 {
 
-    using namespace Nuke::System;
-    std::future<int> fi;
 
 
     auto tzdbString = Nuke::CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();

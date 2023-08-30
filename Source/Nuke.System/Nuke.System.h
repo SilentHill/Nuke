@@ -20,6 +20,9 @@
 #include <System/Diagnostics/Stopwatch.h>
 #include <System/Diagnostics/Process.h>
 
+// 异步
+#include <System/Threading/Tasks/Task.h>
+
 // IO
 #include <System/IO/Path.h>
 #include <System/IO/File.h>
