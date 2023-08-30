@@ -3,6 +3,16 @@
 static std::string tzdbJson = R"TZDB(
 [
   {
+    "StandardName": "Coordinated Universal Time",
+    "Id": "UTC",
+    "HasIanaId": false,
+    "DisplayName": "(UTC) Coordinated Universal Time",
+    "DaylightName": "Coordinated Universal Time",
+    "BaseUtcOffset": "00:00:00",
+    "SupportsDaylightSavingTime": false,
+    "AdjustmentRules": []
+  },
+  {
     "StandardName": "Eastern Standard Time",
     "Id": "America/New_York",
     "HasIanaId": true,

@@ -65,4 +65,9 @@ namespace Nuke::System
         return TimeZoneInfo();
     }
 
+    TimeZoneInfo TimeZoneInfo::Local()
+    {
+        return TimeZoneInfo();
+    }
+
 }
