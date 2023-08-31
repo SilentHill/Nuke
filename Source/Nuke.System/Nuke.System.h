@@ -11,6 +11,7 @@
 #include <System/Version.h>
 #include <System/TimeSpan.h>
 #include <System/DateTime.h>
+#include <System/TimeZoneInfo.h>
 #include <System/Generate.h>
 #include <System/Convert.h>
 

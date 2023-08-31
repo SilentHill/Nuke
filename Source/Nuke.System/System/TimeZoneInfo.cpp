@@ -12,6 +12,13 @@ namespace Nuke::System
     class TimeZoneInfo::TimeZoneInfoInternals
     {
     public:
+        TimeZoneInfoInternals()
+        {
+            if (_timeZoneInfos.empty())
+            {
+                _timeZoneInfos = _loadTimeZoneInfos();
+            }
+        }
         std::string _id;
         std::string _displayName;
         std::string _standardDisplayName;
@@ -25,19 +32,23 @@ namespace Nuke::System
             const std::string& fullJson = CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
             auto j = nlohmann::json::parse(fullJson);
 
-
+            std::vector<TimeZoneInfo> allTimeZoneInfos;
             for (const auto element : j)
             {
-                TimeZoneInfo::TimeZoneInfoInternals timeZoneInfo;
+                auto timeZoneInfoInternals = new TimeZoneInfo::TimeZoneInfoInternals;
                 element["StandardName"].get<std::string>();
+
+                allTimeZoneInfos.push_back(TimeZoneInfo(timeZoneInfoInternals));
             }
             return {};
         }
-        static std::vector<TimeZoneInfo> _timeZoneInfos = _loadTimeZoneInfos();
+        static std::vector<TimeZoneInfo> _timeZoneInfos;
     };
-
     
-
+    TimeZoneInfo::TimeZoneInfo(TimeZoneInfoInternals * internals)
+    {
+        this->internals = internals;
+    }
     
     const std::string UtcId = "UTC";
     const std::string LocalId = "Local";

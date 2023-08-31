@@ -42,7 +42,7 @@ int main(int argc, char** argv)
 
 
 
-    auto tzdbString = Nuke::CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
+    auto tzdbString = Nuke::System::TimeZoneInfo::GetSystemTimeZones();
     auto es = Convert::ToBase64String("HelloWorld", 0, 10);
 
 
