@@ -1,40 +1,24 @@
 ﻿
 #pragma once
 
-#include <System/DateTime.h>
-#include <System/TransitionTime.h>
+#include <_pch.h>
 
-namespace Nuke::System
+namespace Nuke::System::Text::Json
 {
-    /// <summary>
-    /// 提供有关时区调整的信息，例如与夏令时的相互转换
-    /// </summary>
-    class AdjustmentRule
+
+    class IJsonSerializable
     {
     public:
-        TimeSpan BaseUtcOffsetDelta() const;
-        DateTime DateEnd() const;
-        DateTime DateStart() const;
-        TimeSpan DaylightDelta() const;
-        TransitionTime DaylightTransitionEnd() const;
-        TransitionTime DaylightTransitionStart() const;
-        bool HasDaylightSaving() const; // todo privated
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd);
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta);
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta, bool noDaylightTransitions);
-        bool Equals(const AdjustmentRule& other) const;
-        ~AdjustmentRule();
-    private:
-        AdjustmentRule(
-            DateTime dateStart,
-            DateTime dateEnd,
-            TimeSpan daylightDelta,
-            const TransitionTime& daylightTransitionStart,
-            const TransitionTime& daylightTransitionEnd,
-            TimeSpan baseUtcOffsetDelta,
-            bool noDaylightTransitions);
-        //~AdjustmentRule();
-        class AdjustmentRuleInternals;
-        AdjustmentRuleInternals* internals;
+        virtual std::string ToJson();
+        virtual IJsonSerializable& FromJson(const std::string& json);
+    };
+
+
+    class JsonSerializer
+    {
+    public:
+        std::string Serialize(const IJsonSerializable& jsonSerializable);
+
+        IJsonSerializable Deserialize(const std::string& json);
     };
 }

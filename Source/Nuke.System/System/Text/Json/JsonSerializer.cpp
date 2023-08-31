@@ -1,40 +1,32 @@
 ﻿
 #pragma once
 
-#include <System/DateTime.h>
-#include <System/TransitionTime.h>
+#include <System/Text/Json/JsonSerializer.h>
+#include <CrossPlatform/json.hpp>
 
-namespace Nuke::System
+namespace Nuke::System::Text::Json
 {
-    /// <summary>
-    /// 提供有关时区调整的信息，例如与夏令时的相互转换
-    /// </summary>
-    class AdjustmentRule
+
+    struct MyObject
     {
-    public:
-        TimeSpan BaseUtcOffsetDelta() const;
-        DateTime DateEnd() const;
-        DateTime DateStart() const;
-        TimeSpan DaylightDelta() const;
-        TransitionTime DaylightTransitionEnd() const;
-        TransitionTime DaylightTransitionStart() const;
-        bool HasDaylightSaving() const; // todo privated
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd);
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta);
-        static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta, bool noDaylightTransitions);
-        bool Equals(const AdjustmentRule& other) const;
-        ~AdjustmentRule();
-    private:
-        AdjustmentRule(
-            DateTime dateStart,
-            DateTime dateEnd,
-            TimeSpan daylightDelta,
-            const TransitionTime& daylightTransitionStart,
-            const TransitionTime& daylightTransitionEnd,
-            TimeSpan baseUtcOffsetDelta,
-            bool noDaylightTransitions);
-        //~AdjustmentRule();
-        class AdjustmentRuleInternals;
-        AdjustmentRuleInternals* internals;
+        int32_t data;
+        std::vector<std::string> StringArray;
     };
+    
+    struct MyObjectJsonConfig
+    {
+        std::vector<std::string> StringArray;
+    };
+
+
+    using Njson = nlohmann::json;
+    std::string JsonSerializer::Serialize(const IJsonSerializable& jsonSerializable)
+    {
+        return {};
+    }
+
+    IJsonSerializable JsonSerializer::Deserialize(const std::string& json)
+    {
+
+    }
 }

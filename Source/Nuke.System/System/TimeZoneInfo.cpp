@@ -4,10 +4,41 @@
 
 #include <System/AdjustmentRule.h>
 #include "TimeZoneInfo.h"
+#include "CrossPlatform/TimeZoneApi.h"
+#include "CrossPlatform/json.hpp"
 
 namespace Nuke::System
 {
+    class TimeZoneInfo::TimeZoneInfoInternals
+    {
+    public:
+        std::string _id;
+        std::string _displayName;
+        std::string _standardDisplayName;
+        std::string _daylightDisplayName;
+        TimeSpan _baseUtcOffset;
+        bool _supportsDaylightSavingTime;
+        std::vector<AdjustmentRule>  _adjustmentRules;
 
+        static std::vector<TimeZoneInfo> _loadTimeZoneInfos()
+        {
+            const std::string& fullJson = CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
+            auto j = nlohmann::json::parse(fullJson);
+
+
+            for (const auto element : j)
+            {
+                TimeZoneInfo::TimeZoneInfoInternals timeZoneInfo;
+                element["StandardName"].get<std::string>();
+            }
+            return {};
+        }
+        static std::vector<TimeZoneInfo> _timeZoneInfos = _loadTimeZoneInfos();
+    };
+
+    
+
+    
     const std::string UtcId = "UTC";
     const std::string LocalId = "Local";
 
@@ -27,17 +58,6 @@ namespace Nuke::System
 
     const int32_t MaxKeyLength = 255;
 
-    class TimeZoneInfo::TimeZoneInfoInternals
-    {
-    public:
-        std::string _id;
-        std::string _displayName;
-        std::string _standardDisplayName;
-        std::string _daylightDisplayName;
-        TimeSpan _baseUtcOffset;
-        bool _supportsDaylightSavingTime;
-        std::vector<AdjustmentRule>  _adjustmentRules;
-    };
 
     //static TimeZoneInfo s_utcTimeZone = TimeZoneInfo::TimeZoneInfoInternals::CreateUtcTimeZone();
 
@@ -68,6 +88,11 @@ namespace Nuke::System
     TimeZoneInfo TimeZoneInfo::Local()
     {
         return TimeZoneInfo();
+    }
+
+    std::vector<TimeZoneInfo> TimeZoneInfo::GetSystemTimeZones()
+    {
+        return TimeZoneInfo::TimeZoneInfoInternals::_timeZoneInfos;
     }
 
 }

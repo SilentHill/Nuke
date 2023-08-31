@@ -11,7 +11,14 @@ include ("../Nuke.Cpp.cmake")
 # find_package(GTest REQUIRED)
 
 # 编译文件
-add_executable (Nuke.Test ${SRC_H} ${SRC_HH} ${SRC_HPP} ${SRC_CPP} ${SRC_CC})
+add_executable (Nuke.Test
+"_pch.h"
+"Tests/DateTimeTest.h"
+"Tests/TimerTest.h"
+"Tests/StringTest.h"
+
+"Nuke.Test.cpp" 
+)
 
 # 依赖链接
 add_subdirectory("googletest")
