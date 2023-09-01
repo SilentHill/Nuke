@@ -23,8 +23,12 @@ namespace Nuke::System
         static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta);
         static AdjustmentRule CreateAdjustmentRule(DateTime dateStart, DateTime dateEnd, TimeSpan daylightDelta, const TransitionTime& daylightTransitionStart, const TransitionTime& daylightTransitionEnd, TimeSpan baseUtcOffsetDelta, bool noDaylightTransitions);
         bool Equals(const AdjustmentRule& other) const;
+        AdjustmentRule(const AdjustmentRule&) = default;
         ~AdjustmentRule();
+
     private:
+        friend class TimeZoneInfo;
+        AdjustmentRule() = default;
         AdjustmentRule(
             DateTime dateStart,
             DateTime dateEnd,
@@ -33,7 +37,6 @@ namespace Nuke::System
             const TransitionTime& daylightTransitionEnd,
             TimeSpan baseUtcOffsetDelta,
             bool noDaylightTransitions);
-        //~AdjustmentRule();
         class AdjustmentRuleInternals;
         AdjustmentRuleInternals* internals;
     };

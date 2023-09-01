@@ -1,6 +1,7 @@
 ﻿
 #pragma once
 
+#include <_pch.h>
 #include "Sockets/AddressFamily.h"
 
 namespace Nuke::System::Net

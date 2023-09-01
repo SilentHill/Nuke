@@ -262,12 +262,12 @@ namespace Nuke::System
         return static_cast<uint64_t>(dateTime.Ticks());
     }
 
-    void GetDate(DateTime dateTime, int32_t& year, int32_t& month, int32_t& day)
+    void GetDate(DateTime* dateTime, int32_t& year, int32_t& month, int32_t& day)
     {
         // y100 = number of whole 100-year periods since 3/1/0000
             // r1 = (day number within 100-year period) * 4
 
-        auto [y100, r1] = Math::DivRem(((uint32_t)(dateTime.Ticks() / TicksPer6Hours) | 3U) + 1224, DaysPer400Years);
+        auto [y100, r1] = Math::DivRem(((uint32_t)(dateTime->Ticks() / TicksPer6Hours) | 3U) + 1224, DaysPer400Years);
         uint64_t u2 = (uint64_t)Math::BigMul((int)EafMultiplier, (int)r1 | 3);
         ushort daySinceMarch1 = (ushort)((uint)u2 / EafDivider);
         int n3 = 2141 * daySinceMarch1 + 197913;
@@ -512,7 +512,7 @@ namespace Nuke::System
             throw std::out_of_range("bad years");
         }
         int32_t year, month, day;
-        GetDate(*this, year, month, day);
+        GetDate(this, year, month, day);
         int y = year + value;
         if (y < 1 || y > 9999)
         {
@@ -542,7 +542,7 @@ namespace Nuke::System
         }
 
         int32_t year, month, day;
-        GetDate(*this, year, month, day);
+        GetDate(this, year, month, day);
         int32_t y = year, d = day;
         int32_t m = month + months;
         int32_t q = m > 0 ? (int32_t)((uint32_t)(m - 1) / 12) : m / 12 - 1;

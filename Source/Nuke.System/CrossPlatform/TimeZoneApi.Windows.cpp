@@ -2,7 +2,7 @@
 
 #ifdef _WIN32
 
-#include <bits/stdc++.h>
+#include <_pch.h>
 #include "TimeZoneApi.h"
 
 namespace Nuke::CrossPlatform::TimeZoneApi

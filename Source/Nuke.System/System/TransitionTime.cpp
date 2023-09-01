@@ -16,8 +16,8 @@ namespace Nuke::System
         bool _isFixedDateRule;
     };
 
-    extern void GetDate(const DateTime& dateTime, int32_t& year, int32_t& month, int32_t& day);
-    static void ValidateTransitionTime(const DateTime& timeOfDay, int month, int week, int day, DayOfWeek dayOfWeek)
+    extern void GetDate(DateTime* dateTime, int32_t& year, int32_t& month, int32_t& day);
+    static void ValidateTransitionTime(DateTime timeOfDay, int month, int week, int day, DayOfWeek dayOfWeek)
     {
         if (timeOfDay.Kind() != DateTimeKind::Unspecified)
         {
@@ -51,7 +51,7 @@ namespace Nuke::System
         int32_t timeOfDayYear;
         int32_t timeOfDayMonth;
         int32_t timeOfDayDay;
-        GetDate(timeOfDay, timeOfDayYear, timeOfDayMonth, timeOfDayDay);
+        GetDate(&timeOfDay, timeOfDayYear, timeOfDayMonth, timeOfDayDay);
         if (timeOfDayYear != 1 || timeOfDayMonth != 1 || timeOfDayDay != 1 || (timeOfDay.Ticks() % TimeSpan::TicksPerMillisecond != 0))
         {
             throw std::invalid_argument("timeOfDay");

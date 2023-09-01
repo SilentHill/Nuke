@@ -38,26 +38,6 @@
       }
     },
     {
-      "name": "win-x86-debug",
-      "displayName": "win-x86-Debug",
-      "inherits": "windows-base",
-      "architecture": {
-        "value": "x86",
-        "strategy": "external"
-      },
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Debug"
-      }
-    },
-    {
-      "name": "win-x86-release",
-      "displayName": "win-x86-Release",
-      "inherits": "win-x86-debug",
-      "cacheVariables": {
-        "CMAKE_BUILD_TYPE": "Release"
-      }
-    },
-    {
       "name": "linux-debug",
       "displayName": "Linux Debug",
       "generator": "Ninja",

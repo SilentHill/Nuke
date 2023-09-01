@@ -23,6 +23,7 @@ namespace Nuke::System
         TransitionTime _daylightTransitionEnd;
         TimeSpan _baseUtcOffsetDelta;   // delta from the default Utc offset (utcOffset = defaultUtcOffset + _baseUtcOffsetDelta)
         bool _noDaylightTransitions;
+
     };
 
     AdjustmentRule::AdjustmentRule(

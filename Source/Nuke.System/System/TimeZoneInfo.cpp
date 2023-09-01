@@ -3,6 +3,7 @@
 #include "Math.h"
 
 #include <System/AdjustmentRule.h>
+#include <System/String.h>
 #include "TimeZoneInfo.h"
 #include "CrossPlatform/TimeZoneApi.h"
 #include "CrossPlatform/json.hpp"
@@ -14,10 +15,7 @@ namespace Nuke::System
     public:
         TimeZoneInfoInternals()
         {
-            if (_timeZoneInfos.empty())
-            {
-                _timeZoneInfos = _loadTimeZoneInfos();
-            }
+
         }
         std::string _id;
         std::string _displayName;
@@ -27,29 +25,16 @@ namespace Nuke::System
         bool _supportsDaylightSavingTime;
         std::vector<AdjustmentRule>  _adjustmentRules;
 
-        static std::vector<TimeZoneInfo> _loadTimeZoneInfos()
-        {
-            const std::string& fullJson = CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
-            auto j = nlohmann::json::parse(fullJson);
 
-            std::vector<TimeZoneInfo> allTimeZoneInfos;
-            for (const auto element : j)
-            {
-                auto timeZoneInfoInternals = new TimeZoneInfo::TimeZoneInfoInternals;
-                element["StandardName"].get<std::string>();
-
-                allTimeZoneInfos.push_back(TimeZoneInfo(timeZoneInfoInternals));
-            }
-            return {};
-        }
+        static std::vector<TimeZoneInfo> _loadTimeZoneInfos();
         static std::vector<TimeZoneInfo> _timeZoneInfos;
     };
-    
-    TimeZoneInfo::TimeZoneInfo(TimeZoneInfoInternals * internals)
+
+    TimeZoneInfo::TimeZoneInfo(TimeZoneInfoInternals* internals)
     {
         this->internals = internals;
     }
-    
+
     const std::string UtcId = "UTC";
     const std::string LocalId = "Local";
 
@@ -88,8 +73,12 @@ namespace Nuke::System
 
     TimeZoneInfo::~TimeZoneInfo()
     {
-        delete internals;
+
     }
+
+
+
+    std::vector<TimeZoneInfo> TimeZoneInfo::TimeZoneInfoInternals::_timeZoneInfos = TimeZoneInfo::TimeZoneInfoInternals::_loadTimeZoneInfos();
 
     TimeZoneInfo TimeZoneInfo::Utc()
     {
@@ -106,4 +95,65 @@ namespace Nuke::System
         return TimeZoneInfo::TimeZoneInfoInternals::_timeZoneInfos;
     }
 
+    std::vector<TimeZoneInfo> TimeZoneInfo::TimeZoneInfoInternals::_loadTimeZoneInfos()
+    {
+        const std::string& fullJsonString = CrossPlatform::TimeZoneApi::GetTimeZoneDataBaseJsonString();
+        auto timeZoneJson = nlohmann::json::parse(fullJsonString);
+
+        std::vector<TimeZoneInfo> allTimeZoneInfos;
+        for (const auto& timeZoneJsonElement : timeZoneJson)
+        {
+            // std::string _id;
+            // std::string _displayName;
+            // std::string _standardDisplayName;
+            // std::string _daylightDisplayName;
+            // TimeSpan _baseUtcOffset;
+            // bool _supportsDaylightSavingTime;
+            // std::vector<AdjustmentRule>  _adjustmentRules;
+
+            auto timeZoneInfoInternals = new TimeZoneInfo::TimeZoneInfoInternals;
+            timeZoneInfoInternals->_id = timeZoneJsonElement.at("Id").get<std::string>();
+            timeZoneInfoInternals->_displayName = timeZoneJsonElement.at("DisplayName").get<std::string>();
+            timeZoneInfoInternals->_standardDisplayName = timeZoneJsonElement.at("DisplayName").get<std::string>();
+            timeZoneInfoInternals->_daylightDisplayName = timeZoneJsonElement.at("DaylightName").get<std::string>();
+
+            auto timeSpanParts = String::Split(timeZoneJsonElement.at("BaseUtcOffset").get<std::string>(), ":");
+
+            auto hour = std::stoi(timeSpanParts[0]);
+            auto minute = std::stoi(timeSpanParts[1]);
+            auto second = std::stoi(timeSpanParts[2]);
+
+            timeZoneInfoInternals->_baseUtcOffset = TimeSpan(hour, minute, second);
+            timeZoneInfoInternals->_supportsDaylightSavingTime = timeZoneJsonElement.at("SupportsDaylightSavingTime").get<bool>();
+            timeZoneInfoInternals->_daylightDisplayName = timeZoneJsonElement.at("DaylightName").get<std::string>();
+
+            auto& adjustmentRuleJsons = timeZoneJsonElement.at("AdjustmentRules");
+            for (const auto& adjustmentRuleJson : adjustmentRuleJsons)
+            {
+                for (const auto& adjustmentRuleJsonElement : adjustmentRuleJson)
+                {
+                    auto dateStartValue = adjustmentRuleJsonElement.at("DateStart").get<std::string>();
+                    auto dateEndValue = adjustmentRuleJsonElement.at("DateEnd").get<std::string>();
+                    continue;
+                }
+                    /*
+                        DateTime dateStart,
+                        DateTime dateEnd,
+                        TimeSpan daylightDelta,
+                        const TransitionTime& daylightTransitionStart,
+                        const TransitionTime& daylightTransitionEnd,
+                        TimeSpan baseUtcOffsetDelta,
+                        bool noDaylightTransitions
+                    */
+
+            }
+
+
+
+            //  timeZoneInfoInternals->_adjustmentRules = element["AdjustmentRules"].get<std::vector<AdjustmentRule>>();
+
+            allTimeZoneInfos.push_back(TimeZoneInfo(timeZoneInfoInternals));
+        }
+        return {};
+    }
 }
